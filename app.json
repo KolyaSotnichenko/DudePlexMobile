@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "MovieTrailerApp",
-    "slug": "MovieTrailerApp",
+    "name": "DudePlexMobile",
+    "slug": "DudePlexMobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
