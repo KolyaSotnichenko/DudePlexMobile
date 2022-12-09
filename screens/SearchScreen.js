@@ -15,11 +15,12 @@ import { Searchbar } from "react-native-paper";
 import Rating from "./FooterComponent/Rating";
 import LottieView from "lottie-react-native";
 import { API_KEY } from "../models/api";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const { width, height } = Dimensions.get("screen");
 const API_URL = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&sort_by=popularity.desc`;
 
-const SearchScreen = () => {
+const SearchScreen = ({navigation}) => {
   const [movies, setMovies] = useState([]);
   const [Loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
@@ -74,8 +75,11 @@ const SearchScreen = () => {
   }
 
   const renderSearchRow = ({ item, index }) => {
+    console.log(item)
     return (
-      <>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("TrailerScreen", { item, search: true })}
+      >
         <LinearGradient
           colors={["#373636", "#1C1B1A", "#1C1B1A"]}
           start={{ x: 0.0, y: 0.25 }}
@@ -124,7 +128,7 @@ const SearchScreen = () => {
             </Text>
           </View>
         </LinearGradient>
-      </>
+      </TouchableOpacity>
     );
   };
   return (

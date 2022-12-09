@@ -1,6 +1,6 @@
 export const API_KEY = "e3bb99f79b1bb8906dac2d3227927c8f";
 
-const genres = {
+export const genres = {
   12: "Пригода",
   14: "Fantasy",
   16: "Animation",
@@ -28,7 +28,7 @@ const getImagePath = (path) =>
 const getBackdropPath = (path) =>
   `https://image.tmdb.org/t/p/w370_and_h556_multi_faces${path}`;
 
-const getYoutubeKey = (movie_key) =>
+export const getYoutubeKey = (movie_key) =>
   `https://api.themoviedb.org/3/movie/${movie_key}/videos?api_key=${API_KEY}`;
 
 export const getMovies = async () => {

@@ -13,6 +13,7 @@ import YoutubePlayer from "react-native-youtube-iframe";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Icons from "@expo/vector-icons";
 import Rating from "../FooterComponent/Rating";
+import { genres, getYoutubeKey } from "../../models/api";
 
 const { width, height } = Dimensions.get("screen");
 const BUTTON_WIDTH = width / 2;
@@ -22,9 +23,25 @@ const TrailerScreen = ({ route }) => {
   const [cast, setCast] = useState([]);
 
   let data = route.params.item;
-  const YoutubeUrl = data.YoutubeKey;
+
+  let fromSearch = route.params.search;
+
+  let YoutubeUrl;
+
+  if(fromSearch === true){
+    YoutubeUrl = getYoutubeKey(data.id);
+  }else{
+    YoutubeUrl = data.YoutubeKey;
+  }
   const CastUrl = `https://api.themoviedb.org/3/movie/${data.key}/credits?api_key={}&language=uk-UA`;
-  const date = data.releaseDate.split("-");
+
+  let date;
+
+  if(fromSearch === true){
+    date = data.release_date.split("-");
+  }else{
+    date = data.releaseDate.split("-")
+  }
 
   useEffect(() => {
     Promise.all([fetch(YoutubeUrl), fetch(CastUrl)])
@@ -84,9 +101,9 @@ const TrailerScreen = ({ route }) => {
           >
             {data.title}
           </Text>
-          <Rating rating={data.rating} />
+          <Rating rating={fromSearch === true ? data.vote_average : data.rating} />
           <Text style={{ color: "#fff", opacity: 0.7 }}>
-            {date[0]} | {data.genres[0]}, {data.genres[1]}
+            {date[0]} | {fromSearch === true ? genres[data.genre_ids[0]] : data.genres[0] && data.genres[1]}
           </Text>
         </View>
         <View
@@ -114,7 +131,7 @@ const TrailerScreen = ({ route }) => {
               fontFamily: "Medium",
             }}
           >
-            {data.description}
+            {fromSearch === true ? data.overview : data.description}
           </Text>
         </View>
         <Text
