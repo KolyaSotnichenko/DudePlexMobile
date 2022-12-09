@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "MovieTrailerApp",
+    "slug": "MovieTrailerApp",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/images/data-original-removebg-preview.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0e0e0e",
+      "android": { "softwareKeyboardLayoutMode": "pan" }
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.ayushcompany.movieapp",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#0E0E0E"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
