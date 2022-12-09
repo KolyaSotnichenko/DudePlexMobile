@@ -9,12 +9,17 @@
       "image": "./assets/images/data-original-removebg-preview.png",
       "resizeMode": "contain",
       "backgroundColor": "#0e0e0e",
-      "android": { "softwareKeyboardLayoutMode": "pan" }
+      "android": {
+        "softwareKeyboardLayoutMode": "pan"
+      }
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/df5a102c-1d26-4c7a-80c3-91490c030e4a"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
@@ -28,6 +33,14 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "df5a102c-1d26-4c7a-80c3-91490c030e4a"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
   }
 }
