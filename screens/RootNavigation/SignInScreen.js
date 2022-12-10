@@ -62,7 +62,7 @@ const SignInScreen = ({ navigation }) => {
         <Image
           style={{ height: 250, marginTop: 0, width: 300 }}
           resizeMode="center"
-          source={require("../../assets/images/data-original-removebg-preview.png")}
+          source={require("../../assets/logo.png")}
         />
       </View>
       <KeyboardAvoidingView behavior={"position"}>
@@ -75,7 +75,7 @@ const SignInScreen = ({ navigation }) => {
               textAlign: "left",
             }}
           >
-            Sign In
+            Увійти
           </Text>
           <TextInput
             placeholderTextColor="rgba(255,255,255,0.8)"
@@ -135,7 +135,7 @@ const SignInScreen = ({ navigation }) => {
                   fontSize: 18,
                 }}
               >
-                Sign In
+                Увійти
               </Text>
             </LinearGradient>
           </TouchableOpacity>
@@ -170,7 +170,7 @@ const SignInScreen = ({ navigation }) => {
                   fontSize: 18,
                 }}
               >
-                Sign Up
+                Зареєструватися
               </Text>
             </TouchableOpacity>
           </LinearGradient>

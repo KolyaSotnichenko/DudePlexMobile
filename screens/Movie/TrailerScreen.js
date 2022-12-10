@@ -9,11 +9,12 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
+import { Video } from "expo-av";
 import YoutubePlayer from "react-native-youtube-iframe";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Icons from "@expo/vector-icons";
 import Rating from "../FooterComponent/Rating";
-import { genres, getYoutubeKey } from "../../models/api";
+import { API_KEY, genres, getYoutubeKey } from "../../models/api";
 
 const { width, height } = Dimensions.get("screen");
 const BUTTON_WIDTH = width / 2;
@@ -21,6 +22,7 @@ const BUTTON_WIDTH = width / 2;
 const TrailerScreen = ({ route }) => {
   const [youtube, setYoutube] = useState(null);
   const [cast, setCast] = useState([]);
+  const [imdbID, setImdbID] = useState()
 
   let data = route.params.item;
 
@@ -33,7 +35,8 @@ const TrailerScreen = ({ route }) => {
   }else{
     YoutubeUrl = data.YoutubeKey;
   }
-  const CastUrl = `https://api.themoviedb.org/3/movie/${data.key}/credits?api_key={}&language=uk-UA`;
+  const CastUrl = `https://api.themoviedb.org/3/movie/${data.key}/credits?api_key=${API_KEY}&language=uk-UA`;
+  const externalIDS = `https://api.themoviedb.org/3/movie/${data.key}/external_ids?api_key=${API_KEY}`
 
   let date;
 
@@ -42,6 +45,15 @@ const TrailerScreen = ({ route }) => {
   }else{
     date = data.releaseDate.split("-")
   }
+
+  useEffect(() => {
+    fetch(externalIDS)
+      .then(data => {
+        setImdbID(data.json())
+      })
+  },[])
+
+  console.log(imdbID?._z?.imdb_id)
 
   useEffect(() => {
     Promise.all([fetch(YoutubeUrl), fetch(CastUrl)])
@@ -69,7 +81,14 @@ const TrailerScreen = ({ route }) => {
       style={styles.container}
     >
       <ScrollView stickyHeaderIndices={[0]}>
-        <YoutubePlayer height={300} videoId={youtube} />
+        {/* <YoutubePlayer height={300} videoId={youtube} /> */}
+        <Video
+                source={{uri: `https://3442534688564.svetacdn.in/msNIXXBblTTU?imdb_id=${imdbID?._z?.imdb_id}`}}
+                rate={1.0}
+                resizeMode="cover"
+                useNativeControls
+                style={{width: width, height: height/3}}
+              />
         <View style={{ marginTop: -60 }}>
           <Icons.Feather
             name="heart"
@@ -122,7 +141,7 @@ const TrailerScreen = ({ route }) => {
               marginTop: 5,
             }}
           >
-            Overview
+            Огляд
           </Text>
           <Text
             style={{
@@ -144,7 +163,7 @@ const TrailerScreen = ({ route }) => {
             fontSize: 18,
           }}
         >
-          Cast
+          Акторський склад
         </Text>
 
         <View style={{ flexDirection: "row" }}>
@@ -189,7 +208,7 @@ const TrailerScreen = ({ route }) => {
             }}
           />
         </View>
-        <View style={{ marginTop: 15 }}>
+        {/* <View style={{ marginTop: 15 }}>
           <Text
             style={{
               fontFamily: "Medium",
@@ -248,7 +267,7 @@ const TrailerScreen = ({ route }) => {
               </LinearGradient>
             </TouchableOpacity>
           </View>
-        </View>
+        </View> */}
       </ScrollView>
     </LinearGradient>
   );

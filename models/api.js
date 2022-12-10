@@ -2,24 +2,24 @@ export const API_KEY = "e3bb99f79b1bb8906dac2d3227927c8f";
 
 export const genres = {
   12: "Пригода",
-  14: "Fantasy",
-  16: "Animation",
-  18: "Drama",
-  27: "Horror",
-  28: "Action",
-  35: "Comedy",
-  36: "History",
-  37: "Western",
-  53: "Thriller",
-  80: "Crime",
-  99: "Documentary",
-  878: "Science Fiction",
-  9648: "Mystery",
-  10402: "Music",
-  10749: "Romance",
-  10751: "Family",
-  10752: "War",
-  10770: "TV Movie",
+  14: "Фантастика",
+  16: "Анімація",
+  18: "Драма",
+  27: "Жахи",
+  28: "Екшин",
+  35: "Комедія",
+  36: "Історія",
+  37: "Західний",
+  53: "Трилер",
+  80: "Злочинність",
+  99: "Документальний",
+  878: "Наукова фантастика",
+  9648: "Таємниця",
+  10402: "Музика",
+  10749: "Романтика",
+  10751: "Сімейний",
+  10752: "Війна",
+  10770: "ТБ фільм",
 };
 
 const API_URL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=uk-UA&page=1`;
@@ -44,6 +44,7 @@ export const getMovies = async () => {
       overview,
       release_date,
       genre_ids,
+      imdb_id,
     }) => ({
       key: String(id),
       title: original_title,
@@ -54,6 +55,7 @@ export const getMovies = async () => {
       releaseDate: release_date,
       YoutubeKey: getYoutubeKey(id),
       genres: genre_ids.map((genre) => genres[genre]),
+      imdbID: imdb_id,
     })
   );
   return movies;

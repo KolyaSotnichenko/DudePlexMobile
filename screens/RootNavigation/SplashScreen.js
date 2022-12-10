@@ -9,11 +9,20 @@ const SplashScreen = ({ navigation }) => {
       colors={["#181818", "#0F0F0F", "#0C0C0C"]}
       style={styles.container}
     >
-      <Image
-        style={{ height: 250, marginTop: 0, width: 300 }}
-        resizeMode="center"
-        source={require("../../assets/images/data-original-removebg-preview.png")}
-      />
+      <View
+        style={{flexDirection: 'row', alignItems: 'center',}}
+      >
+        <Image
+          style={{ height: 250, marginTop: 0, width: 300, marginLeft: -100 }}
+          resizeMode="center"
+          source={require("../../assets/logo.png")}
+        />
+        <Text
+          style={{color: 'white', fontWeight: '700', fontSize: 30, marginLeft: -90}}
+        >
+          DUDEPLEX
+        </Text>
+      </View>
       <View
         style={{
           alignItems: "center",
@@ -21,11 +30,11 @@ const SplashScreen = ({ navigation }) => {
       >
         <Image
           style={{ width: 300, height: 300 }}
-          source={require("../../assets/images/splash-removebg-preview.png")}
+          source={require("../../assets/logo.png")}
         />
       </View>
       <Text style={{ color: "#fff", fontFamily: "SemiBold" }}>
-        Watch your favourite movies for free
+      Дивіться улюблені фільми та серіали безкоштовно
       </Text>
 
       <TouchableOpacity onPress={() => navigation.navigate("SignInScreen")}>
@@ -42,7 +51,7 @@ const SplashScreen = ({ navigation }) => {
               fontSize: 16,
             }}
           >
-            Get Started
+            Розпочати
           </Text>
         </LinearGradient>
       </TouchableOpacity>
@@ -58,7 +67,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     height: 35,
     width: 200,
-    marginTop: 10,
+    marginTop: 50,
     justifyContent: "center",
     alignItems: "center",
   },

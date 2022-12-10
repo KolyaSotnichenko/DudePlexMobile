@@ -75,7 +75,7 @@ const SearchScreen = ({navigation}) => {
   }
 
   const renderSearchRow = ({ item, index }) => {
-    console.log(item)
+    
     return (
       <TouchableOpacity
         onPress={() => navigation.navigate("TrailerScreen", { item, search: true })}
