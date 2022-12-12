@@ -7,11 +7,14 @@ import {
   TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
+  Dimensions,
   Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import firebase from "firebase";
 import { AuthContext } from "../../components/context";
+
+const { width, height } = Dimensions.get("screen");
 
 const initialValues = {
   email: "",
@@ -46,8 +49,8 @@ const SignInScreen = ({ navigation }) => {
           signIn(result.user.refreshToken);
         })
         .catch((err) => {
-          Alert.alert("Error", "Email or Password is incorrect", [
-            { text: "OK" },
+          Alert.alert("Помилка", "Електронна пошта або пароль неправильні", [
+            { text: "Добре" },
           ]);
           console.log(err);
         });
@@ -58,10 +61,10 @@ const SignInScreen = ({ navigation }) => {
       colors={["#181818", "#0F0F0F", "#0C0C0C"]}
       style={{ flex: 1, alignItems: 'center' }}
     >
-      <View style={{ alignItems: "center" }}>
+      <View style={{ alignItems: "center", marginTop: 50 }}>
         <Image
-          style={{ height: 250, marginTop: 0, width: 300 }}
-          resizeMode="center"
+          style={{ height: height/5, marginTop: 0, width: width/3 }}
+          resizeMode="contain"
           source={require("../../assets/logo.png")}
         />
       </View>

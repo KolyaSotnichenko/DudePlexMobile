@@ -214,7 +214,7 @@ const TrailerScreen = ({ route }) => {
           </View>
         )} */}
         
-        <View style={{ marginTop: -60 }}>
+        <View style={{ marginTop: 30 }}>
           <Icons.Feather
             name="heart"
             size={30}

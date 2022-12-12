@@ -6,11 +6,14 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
-  Alert,
+  // Alert,
+  Dimensions,
   KeyboardAvoidingView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import firebase from "firebase";
+
+const { width, height } = Dimensions.get("screen");
 
 const initialValues = {
   email: "",
@@ -60,14 +63,14 @@ const SignUpScreen = ({ navigation }) => {
       colors={["#181818", "#0F0F0F", "#0C0C0C"]}
       style={{ flex: 1, alignItems: 'center' }}
     >
+      <View style={{ alignItems: "center",  marginTop: 50 }}>
+        <Image
+          style={{ height: height/5, marginTop: 0, width: width/3 }}
+          resizeMode="contain"
+          source={require("../../assets/logo.png")}
+        />
+      </View>
       <KeyboardAvoidingView behavior={"position"}>
-        <View style={{ alignItems: "center" }}>
-          <Image
-            style={{ height: 250, marginTop: 0, width: 300 }}
-            resizeMode="center"
-            source={require("../../assets/logo.png")}
-          />
-        </View>
         <View style={{ alignItems: "flex-start" }}>
           <Text
             style={{
