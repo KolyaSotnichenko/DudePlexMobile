@@ -243,7 +243,7 @@ const TrailerScreen = ({ route }) => {
               textAlign: "center",
             }}
           >
-            {data.trans_title}
+            {data.trans_title || data.title}
           </Text>
           <Rating rating={fromSearch === true ? data.vote_average : data.rating} />
           <Text style={{ color: "#fff", opacity: 0.7 }}>
