@@ -24,6 +24,7 @@
     "lodash.filter": "^4.6.0",
     "lottie-react-native": "5.1.4",
     "react": "18.1.0",
+    "react-cssfx-loading": "^2.1.0",
     "react-dom": "18.1.0",
     "react-native": "0.70.5",
     "react-native-circular-progress": "^1.3.7",

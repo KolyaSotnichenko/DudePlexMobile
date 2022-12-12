@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -7,7 +7,9 @@ import {
   View,
   Image,
   // TouchableOpacity,
+  ActivityIndicator,
   Dimensions,
+  RefreshControl,
 } from "react-native";
 // import YoutubePlayer from "react-native-youtube-iframe";
 import WebView from "react-native-webview";
@@ -16,9 +18,14 @@ import * as Icons from "@expo/vector-icons";
 import Rating from "../FooterComponent/Rating";
 import { API_KEY, genres, getYoutubeKey } from "../../models/api";
 import { MovieType } from "../../components/contextMovieType";
+// import {Hypnosis} from "react-cssfx-loading";
 
 const { width, height } = Dimensions.get("screen");
-const BUTTON_WIDTH = width / 2;
+// const BUTTON_WIDTH = width / 2;
+
+const wait = (timeout) => {
+  return new Promise(resolve => setTimeout(resolve, timeout));
+}
 
 const TrailerScreen = ({ route }) => {
   // const [youtube, setYoutube] = useState(null);
@@ -26,6 +33,8 @@ const TrailerScreen = ({ route }) => {
   const [imdbID, setImdbID] = useState()
   const [imdbIDTV, setImdbIDTV] = useState()
   const [movieType, setMovieType] = useContext(MovieType)
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
 
   let data = route.params.item;
 
@@ -91,24 +100,119 @@ const TrailerScreen = ({ route }) => {
       });
   }, []);
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
+  useEffect(() => {
+    compareIds()
+  }, [isLoaded, imdbID?._z?.imdb_id, imdbIDTV?._z?.imdb_id, onRefresh])
+
+  const compareIds = async () => {
+    if(movieType === "movie"){
+      if(imdbID?._z?.imdb_id){
+        await fetch(`https://videocdn.tv/api/movies?api_token=IISbfTsMm42mRk7dtPxB5zmhEfK3YKau&imdb_id=${imdbID?._z?.imdb_id}`, {headers: {'Access-Control-Allow-Origin': '*' }})
+          .then(response => {
+            if(response.ok){
+              return response.json()
+            }
+
+            throw response
+          })
+          .then(data => {
+            if(data["data"] != null){
+              setIsLoaded(true)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+
+      }
+    }
+
+    if(movieType === "tv"){
+      if(imdbIDTV?._z?.imdb_id){
+        await fetch(`https://videocdn.tv/api/tv-series?api_token=IISbfTsMm42mRk7dtPxB5zmhEfK3YKau&imdb_id=${imdbIDTV?._z?.imdb_id}`, {headers: {'Access-Control-Allow-Origin': '*' }})
+          .then(response => {
+            if(response.ok){
+              return response.json()
+            }
+
+            throw response
+          })
+          .then(data => {
+            if(data["data"] != null){
+              setIsLoaded(true)
+            }
+          })
+          .catch(err => {
+            console.log(err)
+          })
+
+      }
+    }
+  }
+
+
+
   return (
     <LinearGradient
       colors={["#181818", "#0F0F0F", "#0C0C0C"]}
       style={styles.container}
     >
-      <ScrollView stickyHeaderIndices={[0]}>
+      <ScrollView 
+        stickyHeaderIndices={[0]}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
         {/* <YoutubePlayer height={300} videoId={youtube} /> */}
-        {movieType === "movie" ? (
+
+        {movieType === "movie" ? 
+          isLoaded ? (
+            <WebView 
+              source={{ html: `<body style="margin: 0 !important"><iframe width="100%" height="100%" src="https://3442534688564.svetacdn.in/msNIXXBblTTU?imdb_id=${imdbID?._z?.imdb_id}" frameborder="0" allowfullscreen/></body>` }} 
+              style={{width: width, height: height/3, padding: 0}}
+            />
+          ) : (
+            <View style={{width: width, height: height/3, flexDirection: 'row', justifyContent: 'center', alignItems: "center"}}>
+              <ActivityIndicator />
+            </View>
+          )
+        : isLoaded ? (
+          <WebView 
+            source={{ html: `<body style="margin: 0 !important"><iframe width="100%" height="100%" src="https://3442534688564.svetacdn.in/msNIXXBblTTU?imdb_id=${imdbIDTV?._z?.imdb_id}" frameborder="0" allowfullscreen/></body>` }} 
+            style={{width: width, height: height/3, padding: 0}}
+          />
+        ) : (
+          <View style={{width: width, height: height/3, flexDirection: 'row', justifyContent: 'center', alignItems: "center"}}>
+            <ActivityIndicator />
+          </View>
+        )}
+
+
+        {/* {movieType === "movie" && isLoaded ? (
           <WebView 
             source={{ html: `<body style="margin: 0 !important"><iframe width="100%" height="100%" src="https://3442534688564.svetacdn.in/msNIXXBblTTU?imdb_id=${imdbID?._z?.imdb_id}" frameborder="0" allowfullscreen/></body>` }} 
             style={{width: width, height: height/3, padding: 0}}
           />
         ): (
+          <View>
+            <ActivityIndicator />
+          </View>
+        )} 
+        {movieType === "tv" && isLoaded ? (
           <WebView 
             source={{ html: `<body style="margin: 0 !important"><iframe width="100%" height="100%" src="https://3442534688564.svetacdn.in/msNIXXBblTTU?imdb_id=${imdbIDTV?._z?.imdb_id}" frameborder="0" allowfullscreen/></body>` }} 
             style={{width: width, height: height/3, padding: 0}}
           />
-        )}
+        ) : (
+          <View style={{width: width, height: height/3}}>
+            <ActivityIndicator />
+          </View>
+        )} */}
         
         <View style={{ marginTop: -60 }}>
           <Icons.Feather
@@ -139,7 +243,7 @@ const TrailerScreen = ({ route }) => {
               textAlign: "center",
             }}
           >
-            {data.title}
+            {data.trans_title}
           </Text>
           <Rating rating={fromSearch === true ? data.vote_average : data.rating} />
           <Text style={{ color: "#fff", opacity: 0.7 }}>
