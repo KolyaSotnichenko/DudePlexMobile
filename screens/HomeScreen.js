@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback } from "react";
+import React, { useEffect, useState, useRef, useCallback, useContext } from "react";
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import { getMovies } from "../models/api";
 import Rating from "./FooterComponent/Rating";
 import Backdrop from "./Backdrop";
 import Genres from "./FooterComponent/Genres";
+import { MovieType } from "../components/contextMovieType";
 
 const { width, height } = Dimensions.get("window");
 const SPACING = 10;
@@ -21,6 +22,7 @@ const ITEM_SIZE = width * 0.72;
 
 const HomeScreen = ({ navigation }) => {
   const [movies, setMovies] = useState([]);
+  const [movieType, setMovieType] = useContext(MovieType)
   const scrollx = useRef(new Animated.Value(0)).current;
   const SPACER_ITEM_SIZE = (width - ITEM_SIZE) / 2;
   const load = useRef(true);
@@ -73,7 +75,10 @@ const HomeScreen = ({ navigation }) => {
           }}
         >
           <TouchableOpacity
-            onPress={() => navigation.navigate("TrailerScreen", { item: item })}
+            onPress={() => {
+              setMovieType("movie")
+              navigation.navigate("TrailerScreen", { item: item })
+            }}
             style={[styles.posterImage, { elevation: 2 }]}
           >
             <Image source={{ uri: item.poster }} style={styles.posterImage} />

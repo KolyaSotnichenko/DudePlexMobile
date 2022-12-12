@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, StatusBar } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import AuthStack from "./components/navigation/AuthStack";
@@ -6,8 +6,12 @@ import { useFonts } from "expo-font";
 import { createStackNavigator } from "@react-navigation/stack";
 import TrailerScreen from "./screens/Movie/TrailerScreen";
 import firebase from "firebase";
+import { MovieType } from "./components/contextMovieType";
 
 function App() {
+
+  const [movieType, setMovieType] = useState("")
+
   const firebaseConfig = {
     apiKey: "AIzaSyB8J4EwGntAiu1ntW8cOqV_5MvSi1ylizo",
     authDomain: "dudeplex-d3943.firebaseapp.com",
@@ -31,18 +35,22 @@ function App() {
     return null;
   }
   const TrailerScreenStack = createStackNavigator();
+
+
   return (
     <>
-      <StatusBar barStyle={"light-content"} />
-      <NavigationContainer>
-        <TrailerScreenStack.Navigator screenOptions={{ headerShown: false }}>
-          <TrailerScreenStack.Screen name="AuthStack" component={AuthStack} />
-          <TrailerScreenStack.Screen
-            name="TrailerScreen"
-            component={TrailerScreen}
-          />
-        </TrailerScreenStack.Navigator>
-      </NavigationContainer>
+      <MovieType.Provider value={[movieType, setMovieType]}>
+        <StatusBar barStyle={"light-content"} />
+        <NavigationContainer>
+          <TrailerScreenStack.Navigator screenOptions={{ headerShown: false }}>
+            <TrailerScreenStack.Screen name="AuthStack" component={AuthStack} />
+            <TrailerScreenStack.Screen
+              name="TrailerScreen"
+              component={TrailerScreen}
+            />
+          </TrailerScreenStack.Navigator>
+        </NavigationContainer>
+      </MovieType.Provider>
     </>
   );
 }

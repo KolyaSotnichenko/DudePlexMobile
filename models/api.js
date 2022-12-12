@@ -89,3 +89,19 @@ export const getTV = async () => {
   );
   return tvs;
 };
+
+export const getTvIds = async (id) => {
+  const {results} = await fetch(`https://api.themoviedb.org/3/tv/${id}/external_ids?api_key=${API_KEY}&language=uk-UA`).then((response) => response.json());
+
+  const ids = results.map(
+    ({
+      id,
+      imdb_id,
+    }) => ({
+      key: String(id),
+      imdb_id: imdb_id
+    })
+  )
+
+  return ids
+}

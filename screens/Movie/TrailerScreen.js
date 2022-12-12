@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -15,14 +15,17 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as Icons from "@expo/vector-icons";
 import Rating from "../FooterComponent/Rating";
 import { API_KEY, genres, getYoutubeKey } from "../../models/api";
+import { MovieType } from "../../components/contextMovieType";
 
 const { width, height } = Dimensions.get("screen");
 const BUTTON_WIDTH = width / 2;
 
 const TrailerScreen = ({ route }) => {
-  const [youtube, setYoutube] = useState(null);
+  // const [youtube, setYoutube] = useState(null);
   const [cast, setCast] = useState([]);
   const [imdbID, setImdbID] = useState()
+  const [imdbIDTV, setImdbIDTV] = useState()
+  const [movieType, setMovieType] = useContext(MovieType)
 
   let data = route.params.item;
 
@@ -36,7 +39,8 @@ const TrailerScreen = ({ route }) => {
     YoutubeUrl = data.YoutubeKey;
   }
   const CastUrl = `https://api.themoviedb.org/3/movie/${data.key}/credits?api_key=${API_KEY}&language=uk-UA`;
-  const externalIDS = `https://api.themoviedb.org/3/movie/${data.key}/external_ids?api_key=${API_KEY}`
+  const externalIDSMovie = `https://api.themoviedb.org/3/movie/${data.key}/external_ids?api_key=${API_KEY}`
+  const externalIDSTV = `https://api.themoviedb.org/3/tv/${data.key}/external_ids?api_key=${API_KEY}&language=uk-UA`
 
   let date;
 
@@ -47,16 +51,21 @@ const TrailerScreen = ({ route }) => {
   }
 
   useEffect(() => {
-    fetch(externalIDS)
+    fetch(externalIDSMovie)
       .then(data => {
         setImdbID(data.json())
       })
+    fetch(externalIDSTV)
+      .then(data => {
+        setImdbIDTV(data.json())
+        console.log(imdbIDTV?._z?.imdb_id)
+      })
   },[])
 
-  console.log(imdbID?._z?.imdb_id)
+  console.log(movieType)
 
   useEffect(() => {
-    Promise.all([fetch(YoutubeUrl), fetch(CastUrl)])
+    Promise.all([fetch(CastUrl)])
       .then(function (responses) {
         // Get a JSON object from each of the responses
         return Promise.all(
@@ -66,9 +75,9 @@ const TrailerScreen = ({ route }) => {
         );
       })
       .then((data) => {
-        setYoutube(data[0].results[0].key);
+        // setYoutube(data[0].results[0].key);
 
-        setCast(data[1].cast);
+        setCast(data[0].cast);
       })
       .catch((err) => {
         console.log(err);
@@ -82,10 +91,18 @@ const TrailerScreen = ({ route }) => {
     >
       <ScrollView stickyHeaderIndices={[0]}>
         {/* <YoutubePlayer height={300} videoId={youtube} /> */}
-        <WebView 
-          source={{ html: `<body style="margin: 0 !important"><iframe width="100%" height="100%" src="https://3442534688564.svetacdn.in/msNIXXBblTTU?imdb_id=${imdbID?._z?.imdb_id}" frameborder="0" allowfullscreen/></body>` }} 
-          style={{width: width, height: height/3, padding: 0}}
-        />
+        {movieType === "movie" ? (
+          <WebView 
+            source={{ html: `<body style="margin: 0 !important"><iframe width="100%" height="100%" src="https://3442534688564.svetacdn.in/msNIXXBblTTU?imdb_id=${imdbID?._z?.imdb_id}" frameborder="0" allowfullscreen/></body>` }} 
+            style={{width: width, height: height/3, padding: 0}}
+          />
+        ): (
+          <WebView 
+            source={{ html: `<body style="margin: 0 !important"><iframe width="100%" height="100%" src="https://3442534688564.svetacdn.in/msNIXXBblTTU?imdb_id=${imdbIDTV?._z?.imdb_id}" frameborder="0" allowfullscreen/></body>` }} 
+            style={{width: width, height: height/3, padding: 0}}
+          />
+        )}
+        
         <View style={{ marginTop: -60 }}>
           <Icons.Feather
             name="heart"
