@@ -9,8 +9,8 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import { Video } from "expo-av";
 import YoutubePlayer from "react-native-youtube-iframe";
+import WebView from "react-native-webview";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Icons from "@expo/vector-icons";
 import Rating from "../FooterComponent/Rating";
@@ -82,13 +82,10 @@ const TrailerScreen = ({ route }) => {
     >
       <ScrollView stickyHeaderIndices={[0]}>
         {/* <YoutubePlayer height={300} videoId={youtube} /> */}
-        <Video
-                source={{uri: `https://3442534688564.svetacdn.in/msNIXXBblTTU?imdb_id=${imdbID?._z?.imdb_id}`}}
-                rate={1.0}
-                resizeMode="cover"
-                useNativeControls
-                style={{width: width, height: height/3}}
-              />
+        <WebView 
+          source={{ html: `<body style="margin: 0 !important"><iframe width="100%" height="100%" src="https://3442534688564.svetacdn.in/msNIXXBblTTU?imdb_id=${imdbID?._z?.imdb_id}" frameborder="0" allowfullscreen/></body>` }} 
+          style={{width: width, height: height/3, padding: 0}}
+        />
         <View style={{ marginTop: -60 }}>
           <Icons.Feather
             name="heart"

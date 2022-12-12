@@ -30,7 +30,7 @@ const SplashScreen = ({ navigation }) => {
       >
         <Image
           style={{ width: 300, height: 300 }}
-          source={require("../../assets/logo.png")}
+          source={require("../../assets/images/splash-removebg-preview.png")}
         />
       </View>
       <Text style={{ color: "#fff", fontFamily: "SemiBold" }}>
