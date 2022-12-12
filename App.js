@@ -10,7 +10,7 @@ import { MovieType } from "./components/contextMovieType";
 
 function App() {
 
-  const [movieType, setMovieType] = useState("")
+  const [movieType, setMovieType] = useState("movie")
 
   const firebaseConfig = {
     apiKey: "AIzaSyB8J4EwGntAiu1ntW8cOqV_5MvSi1ylizo",

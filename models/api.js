@@ -19,6 +19,7 @@ export const genres = {
   10749: "Романтика",
   10751: "Сімейний",
   10752: "Війна",
+  10765: "Наукова фантастика та фентезі",
   10770: "ТБ фільм",
 };
 
@@ -44,7 +45,7 @@ export const getMovies = async () => {
       overview,
       release_date,
       genre_ids,
-      imdb_id,
+      title,
     }) => ({
       key: String(id),
       title: original_title,
@@ -55,7 +56,7 @@ export const getMovies = async () => {
       releaseDate: release_date,
       YoutubeKey: getYoutubeKey(id),
       genres: genre_ids.map((genre) => genres[genre]),
-      imdbID: imdb_id,
+      trans_title: title,
     })
   );
   return movies;

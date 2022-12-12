@@ -90,7 +90,7 @@ const HomeScreen = ({ navigation }) => {
               fontFamily: "Medium",
             }}
           >
-            {item.title}
+            {item.trans_title}
           </Text>
 
           <Rating rating={item.rating} />

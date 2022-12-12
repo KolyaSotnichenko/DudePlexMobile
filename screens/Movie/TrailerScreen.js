@@ -6,10 +6,10 @@ import {
   ScrollView,
   View,
   Image,
-  TouchableOpacity,
+  // TouchableOpacity,
   Dimensions,
 } from "react-native";
-import YoutubePlayer from "react-native-youtube-iframe";
+// import YoutubePlayer from "react-native-youtube-iframe";
 import WebView from "react-native-webview";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Icons from "@expo/vector-icons";
@@ -29,6 +29,8 @@ const TrailerScreen = ({ route }) => {
 
   let data = route.params.item;
 
+  console.log(data)
+
   let fromSearch = route.params.search;
 
   let YoutubeUrl;
@@ -38,15 +40,24 @@ const TrailerScreen = ({ route }) => {
   }else{
     YoutubeUrl = data.YoutubeKey;
   }
-  const CastUrl = `https://api.themoviedb.org/3/movie/${data.key}/credits?api_key=${API_KEY}&language=uk-UA`;
-  const externalIDSMovie = `https://api.themoviedb.org/3/movie/${data.key}/external_ids?api_key=${API_KEY}`
-  const externalIDSTV = `https://api.themoviedb.org/3/tv/${data.key}/external_ids?api_key=${API_KEY}&language=uk-UA`
+  const CastUrl = `https://api.themoviedb.org/3/movie/${data.key | data.id}/credits?api_key=${API_KEY}&language=uk-UA`;
+  const externalIDSMovie = `https://api.themoviedb.org/3/movie/${data.key | data.id}/external_ids?api_key=${API_KEY}`
+  const externalIDSTV = `https://api.themoviedb.org/3/tv/${data.key | data.id}/external_ids?api_key=${API_KEY}&language=uk-UA`
 
   let date;
 
   if(fromSearch === true){
-    date = data.release_date.split("-");
+    if(movieType === "tv"){
+      date = data.first_air_date.split("-");
+    }
+    else{
+      date = data.release_date.split("-")
+    }
   }else{
+    if(movieType === "tv"){
+      date = data.releaseDate.split("-");
+    }
+
     date = data.releaseDate.split("-")
   }
 
@@ -61,8 +72,6 @@ const TrailerScreen = ({ route }) => {
         console.log(imdbIDTV?._z?.imdb_id)
       })
   },[])
-
-  console.log(movieType)
 
   useEffect(() => {
     Promise.all([fetch(CastUrl)])
@@ -164,7 +173,8 @@ const TrailerScreen = ({ route }) => {
               fontFamily: "Medium",
             }}
           >
-            {fromSearch === true ? data.overview : data.description}
+            {/* {fromSearch === true ? data.overview : data.description} */}
+            {data.overview  || data.description ? data.overview || data.description : null}
           </Text>
         </View>
         <Text

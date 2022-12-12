@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import filter from "lodash.filter";
 import {
   View,
@@ -16,70 +16,62 @@ import Rating from "./FooterComponent/Rating";
 import LottieView from "lottie-react-native";
 import { API_KEY } from "../models/api";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { MovieType } from "../components/contextMovieType";
 
 const { width, height } = Dimensions.get("screen");
-const API_URL = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&sort_by=popularity.desc`;
 
 const SearchScreen = ({navigation}) => {
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState();
+  const [movieType, setMovieType] = useContext(MovieType)
   const [Loading, setLoading] = useState(true);
   const [query, setQuery] = useState("");
   const [fullData, setFullData] = useState([]);
+  const [provider, setProvider] = useState("movies")
+  const [inputSearch, setInputSearch] = useState("")
 
-  useEffect(() => {
-    if (movies.length === 0) {
-      fetchData();
+  const API_URL_MOVIES = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=uk-UA&query=${inputSearch}&page=1&include_adult=false`;
+  const API_URL_TVS = `https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&language=uk-UA&page=1&query=${inputSearch}&include_adult=false`
+
+  const fetchData = (text) => {
+
+    if(provider === "movies"){
+      return fetch(API_URL_MOVIES).then(res => res.json())
+    }else{
+      return fetch(API_URL_TVS).then(res => res.json())
     }
-  }, [movies]);
-  const fetchData = async () => {
-    const { results } = await fetch(API_URL).then((response) =>
-      response.json()
-    );
-    setMovies(results);
-    setFullData(results);
-    setLoading(false);
   };
 
-  const handleSearch = (text) => {
-    const formattedQuery = text.toLowerCase();
-    const filteredData = filter(fullData, (movie_title) => {
-      return contains(movie_title, formattedQuery);
-    });
-    setMovies(filteredData);
-    setQuery(text);
+  const handleSearch = (event) => {
+    setInputSearch(event)
+    fetchData(inputSearch).then(data => setMovies(data.results))
   };
-  const contains = ({ original_title, movie_poster }, query) => {
-    original_title = original_title.toLowerCase();
-    if (original_title.includes(query)) {
-      return true;
-    }
-    return false;
-  };
-  if (Loading === true) {
-    return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: "#0F0F0F",
-        }}
-      >
-        <LottieView
-          source={require("../assets/LottieAnimation/search.json")}
-          autoPlay
-          loop
-        />
-      </View>
-    );
-  }
+
+  console.log(movies)
+
+  // if (Loading === true) {
+  //   return (
+  //     <View
+  //       style={{
+  //         flex: 1,
+  //         justifyContent: "center",
+  //         alignItems: "center",
+  //         backgroundColor: "#0F0F0F",
+  //       }}
+  //     >
+  //       <LottieView
+  //         source={require("../assets/LottieAnimation/search.json")}
+  //         autoPlay
+  //         loop
+  //       />
+  //     </View>
+  //   );
+  // }
 
   const renderSearchRow = ({ item, index }) => {
     
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate("TrailerScreen", { item, search: true })}
-      >
+        onPress={() => navigation.navigate("TrailerScreen", { item, search: true })}>
         <LinearGradient
           colors={["#373636", "#1C1B1A", "#1C1B1A"]}
           start={{ x: 0.0, y: 0.25 }}
@@ -113,7 +105,7 @@ const SearchScreen = ({navigation}) => {
 
               numberOfLines={3}
             >
-              {item.original_title}
+              {provider === "movies" ? item.title : item.name}
             </Text>
             <View
               style={{
@@ -139,13 +131,28 @@ const SearchScreen = ({navigation}) => {
       >
         <Searchbar
           style={styles.searchbar}
-          value={query}
-          onChangeText={(queryText) => handleSearch(queryText)}
+          value={inputSearch}
+          onChangeText={(e) => handleSearch(e)}
           placeholderTextColor="#fff"
           iconColor="#fff"
-          placeholder="Search movies..."
+          placeholder={provider === "movies" ? "Знайти фільм" : "Знайти серіал"}
           color="#fff"
         />
+
+        <View style={styles.tabs}>
+          <Text style={provider === "movies" ? {fontWeight: 'bold', color: 'royalblue'} : {color: '#fff'}} onPress={() => {
+            setInputSearch("")
+            setMovies(null)
+            setProvider("movies")
+            setMovieType("movie")
+          }}>Фільми</Text>
+          <Text style={provider === "tvs" ? {fontWeight: 'bold', color: 'royalblue'} : {color: '#fff'}} onPress={() => {
+            setInputSearch("")
+            setMovies(null)
+            setProvider("tvs")
+            setMovieType("tv")
+          }}>Серіали</Text>
+        </View>
 
         <FlatList
           data={movies}
@@ -215,4 +222,11 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     marginBottom: 5,
   },
+  tabs: {
+    width: width,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    height: 50,
+    alignItems: 'center',
+  }
 });
