@@ -45,11 +45,11 @@ const SignUpScreen = ({ navigation }) => {
       firebase
         .auth()
         .createUserWithEmailAndPassword(email, password)
-        .then((result) => {
-          Alert.alert("Succes", "Please verify your email to continue", [
-            { text: "Okay" },
-          ]);
-        })
+        // .then((result) => {
+        //   Alert.alert("Succes", "Please verify your email to continue", [
+        //     { text: "Okay" },
+        //   ]);
+        // })
         .catch((err) => {
           console.log(err);
         });
@@ -58,17 +58,17 @@ const SignUpScreen = ({ navigation }) => {
   return (
     <LinearGradient
       colors={["#181818", "#0F0F0F", "#0C0C0C"]}
-      style={{ flex: 1 }}
+      style={{ flex: 1, alignItems: 'center' }}
     >
       <KeyboardAvoidingView behavior={"position"}>
         <View style={{ alignItems: "center" }}>
           <Image
             style={{ height: 250, marginTop: 0, width: 300 }}
             resizeMode="center"
-            source={require("../../assets/images/data-original-removebg-preview.png")}
+            source={require("../../assets/logo.png")}
           />
         </View>
-        <View style={{ alignItems: "flex-start", marginLeft: 30 }}>
+        <View style={{ alignItems: "flex-start" }}>
           <Text
             style={{
               fontFamily: "SemiBold",
@@ -77,7 +77,7 @@ const SignUpScreen = ({ navigation }) => {
               textAlign: "left",
             }}
           >
-            Sign Up
+            Зареєструватися
           </Text>
           <TextInput
             placeholderTextColor="rgba(255,255,255,0.8)"
@@ -98,7 +98,7 @@ const SignUpScreen = ({ navigation }) => {
           />
           <TextInput
             placeholderTextColor="rgba(255,255,255,0.8)"
-            placeholder="Password   "
+            placeholder="Пароль   "
             style={[styles.textInput, { marginTop: 30, color: "#fff" }]}
             value={values.password}
             onChangeText={(val) => handleInputChange(val, "password")}
@@ -116,7 +116,7 @@ const SignUpScreen = ({ navigation }) => {
           />
           <TextInput
             placeholderTextColor="rgba(255,255,255,0.8)"
-            placeholder="Confirm Password    "
+            placeholder="Підтвердіть пароль    "
             style={[styles.textInput, { marginTop: 30, color: "#fff" }]}
             textBreakStrategy="balanced"
             value={values.confirmPassword}
@@ -156,7 +156,7 @@ const SignUpScreen = ({ navigation }) => {
                   fontSize: 18,
                 }}
               >
-                Sign Up
+                Зареєструватися
               </Text>
             </LinearGradient>
           </TouchableOpacity>
@@ -191,7 +191,7 @@ const SignUpScreen = ({ navigation }) => {
                   fontSize: 18,
                 }}
               >
-                Sign In
+                Увійти
               </Text>
             </TouchableOpacity>
           </LinearGradient>

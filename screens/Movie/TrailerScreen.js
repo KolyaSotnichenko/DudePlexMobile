@@ -29,8 +29,6 @@ const TrailerScreen = ({ route }) => {
 
   let data = route.params.item;
 
-  console.log(data)
-
   let fromSearch = route.params.search;
 
   let YoutubeUrl;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { Text, View, TouchableOpacity, Image, StyleSheet, SafeAreaView } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -9,20 +9,20 @@ const SplashScreen = ({ navigation }) => {
       colors={["#181818", "#0F0F0F", "#0C0C0C"]}
       style={styles.container}
     >
-      <View
+      <SafeAreaView
         style={{flexDirection: 'row', alignItems: 'center',}}
       >
-        <Image
+        {/* <Image
           style={{ height: 250, marginTop: 0, width: 300, marginLeft: -100 }}
           resizeMode="center"
           source={require("../../assets/logo.png")}
-        />
+        /> */}
         <Text
-          style={{color: 'white', fontWeight: '700', fontSize: 30, marginLeft: -90}}
+          style={{color: 'white', fontWeight: '700', fontSize: 30}}
         >
           DUDEPLEX
         </Text>
-      </View>
+      </SafeAreaView>
       <View
         style={{
           alignItems: "center",
@@ -62,7 +62,11 @@ const SplashScreen = ({ navigation }) => {
 export default SplashScreen;
 
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: "center" },
+  container: { 
+    flex: 1,
+    justifyContent: 'center', 
+    alignItems: "center",
+  },
   buttonGradient: {
     borderRadius: 50,
     height: 35,

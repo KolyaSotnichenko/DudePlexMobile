@@ -56,7 +56,7 @@ const SignInScreen = ({ navigation }) => {
   return (
     <LinearGradient
       colors={["#181818", "#0F0F0F", "#0C0C0C"]}
-      style={{ flex: 1 }}
+      style={{ flex: 1, alignItems: 'center' }}
     >
       <View style={{ alignItems: "center" }}>
         <Image
@@ -66,7 +66,7 @@ const SignInScreen = ({ navigation }) => {
         />
       </View>
       <KeyboardAvoidingView behavior={"position"}>
-        <View style={{ alignItems: "flex-start", marginLeft: 30 }}>
+        <View style={{ alignItems: "flex-start"}}>
           <Text
             style={{
               fontFamily: "SemiBold",
@@ -97,7 +97,7 @@ const SignInScreen = ({ navigation }) => {
           />
           <TextInput
             placeholderTextColor="rgba(255,255,255,0.8)"
-            placeholder="Password   "
+            placeholder="Пароль   "
             style={[styles.textInput, { marginTop: 30, color: "#Fff" }]}
             secureTextEntry={true}
             value={values.password}

@@ -150,7 +150,7 @@ const ProfileScreen = () => {
                 marginRight: 10,
               }}
             >
-              Sign Out
+              Вихід
             </Text>
             <Icons.Feather name="log-out" color="#fff" size={24} />
           </LinearGradient>
