@@ -140,13 +140,13 @@ const SearchScreen = ({navigation}) => {
         />
 
         <View style={styles.tabs}>
-          <Text style={provider === "movies" ? {fontWeight: 'bold', color: 'royalblue'} : {color: '#fff'}} onPress={() => {
+          <Text style={provider === "movies" ? {fontWeight: 'bold', color: 'royalblue', borderWidth: '1px', borderRadius: 10, paddingTop: 10, paddingBottom: 10, paddingLeft: 15, paddingRight: 15, borderColor: 'royalblue'} : {color: '#fff'}} onPress={() => {
             setInputSearch("")
             setMovies(null)
             setProvider("movies")
             setMovieType("movie")
           }}>Фільми</Text>
-          <Text style={provider === "tvs" ? {fontWeight: 'bold', color: 'royalblue'} : {color: '#fff'}} onPress={() => {
+          <Text style={provider === "tvs" ? {fontWeight: 'bold', color: 'royalblue', borderWidth: '1px', borderRadius: 10, paddingTop: 10, paddingBottom: 10, paddingLeft: 15, paddingRight: 15, borderColor: 'royalblue'} : {color: '#fff'}} onPress={() => {
             setInputSearch("")
             setMovies(null)
             setProvider("tvs")
