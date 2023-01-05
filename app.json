@@ -21,7 +21,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ayushcompany.movieapp"
     },
     "android": {
       "package": "com.ayushcompany.movieapp",

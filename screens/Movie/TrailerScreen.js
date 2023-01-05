@@ -292,7 +292,7 @@ const TrailerScreen = ({ route }) => {
           Акторський склад
         </Text>
 
-        <View style={{ flexDirection: "row" }}>
+        <View style={{ flexDirection: "row", marginBottom: 20 }}>
           <FlatList
             horizontal
             data={cast}

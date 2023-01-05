@@ -46,8 +46,6 @@ const SearchScreen = ({navigation}) => {
     fetchData(inputSearch).then(data => setMovies(data.results))
   };
 
-  console.log(movies)
-
   // if (Loading === true) {
   //   return (
   //     <View
