@@ -76,6 +76,7 @@ export const getTV = async () => {
       overview,
       first_air_date,
       genre_ids,
+      name
     }) => ({
       key: String(id),
       title: original_name,
@@ -86,6 +87,7 @@ export const getTV = async () => {
       releaseDate: first_air_date,
       YoutubeKey: getYoutubeKey(id),
       genres: genre_ids.map((genre) => genres[genre]),
+      trans_title: name,
     })
   );
   return tvs;
