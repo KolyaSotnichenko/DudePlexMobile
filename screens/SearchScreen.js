@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import filter from "lodash.filter";
+import React, { useContext, useState } from "react";
+// import filter from "lodash.filter";
 import {
   View,
   Text,
@@ -13,7 +13,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Searchbar } from "react-native-paper";
 
 import Rating from "./FooterComponent/Rating";
-import LottieView from "lottie-react-native";
+// import LottieView from "lottie-react-native";
 import { API_KEY } from "../models/api";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { MovieType } from "../components/contextMovieType";
@@ -23,21 +23,21 @@ const { width, height } = Dimensions.get("screen");
 const SearchScreen = ({navigation}) => {
   const [movies, setMovies] = useState();
   const [movieType, setMovieType] = useContext(MovieType)
-  const [Loading, setLoading] = useState(true);
-  const [query, setQuery] = useState("");
-  const [fullData, setFullData] = useState([]);
+  // const [Loading, setLoading] = useState(true);
+  // const [query, setQuery] = useState("");
+  // const [fullData, setFullData] = useState([]);
   const [provider, setProvider] = useState("movies")
   const [inputSearch, setInputSearch] = useState("")
 
   const API_URL_MOVIES = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=uk-UA&query=${inputSearch}&page=1&include_adult=false`;
   const API_URL_TVS = `https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&language=uk-UA&page=1&query=${inputSearch}&include_adult=false`
 
-  const fetchData = (text) => {
+  const fetchData = async (text) => {
 
     if(provider === "movies"){
-      return fetch(API_URL_MOVIES).then(res => res.json())
+      return await fetch(API_URL_MOVIES).then(res => res.json())
     }else{
-      return fetch(API_URL_TVS).then(res => res.json())
+      return await fetch(API_URL_TVS).then(res => res.json())
     }
   };
 
@@ -69,7 +69,7 @@ const SearchScreen = ({navigation}) => {
     
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate("TrailerScreen", { item, search: true })}>
+        onPress={() => navigation.navigate("MovieScreen", { item, search: true })}>
         <LinearGradient
           colors={["#373636", "#1C1B1A", "#1C1B1A"]}
           start={{ x: 0.0, y: 0.25 }}

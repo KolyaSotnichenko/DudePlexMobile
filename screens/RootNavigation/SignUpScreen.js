@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import firebase from "firebase";
+import db from "firebase/firestore"
 
 const { width, height } = Dimensions.get("screen");
 
@@ -53,6 +54,12 @@ const SignUpScreen = ({ navigation }) => {
         //     { text: "Okay" },
         //   ]);
         // })
+          .then((result) => {
+            firebase.firestore().collection("mobile_users").doc(result.user.uid).set({
+              id: result.user.uid,
+              name: result.user.email
+            })
+          })
         .catch((err) => {
           console.log(err);
         });

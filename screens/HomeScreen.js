@@ -9,8 +9,8 @@ import {
   Animated,
   SafeAreaView,
 } from "react-native";
-
-import { getMovies } from "../models/api";
+import SwitchSelector from "react-native-switch-selector";
+import { getMovies, getTV } from "../models/api";
 import Rating from "./FooterComponent/Rating";
 import Backdrop from "./Backdrop";
 import Genres from "./FooterComponent/Genres";
@@ -28,20 +28,38 @@ const HomeScreen = ({ navigation }) => {
   const load = useRef(true);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const movies = await getMovies();
-      if (load.current === true) {
-        setMovies([{ key: "left-spacer" }, ...movies, { key: "right-spacer" }]);
-      }
-    };
 
-    if (movies.length === 0) {
-      fetchData(movies);
-    }
-    return () => {
-      load.current = false;
-    };
-  }, [movies]);
+      const fetchData = async () => {
+        if(movieType === "tv"){
+          const movies = await getTV();
+          if (load.current === true) {
+            setMovies([{ key: "left-spacer" }, ...movies, { key: "right-spacer" }]);
+            console.log(`TV works & ${movieType}`)
+          }
+        }else{
+          const movies = await getMovies();
+          if (load.current === true) {
+            setMovies([{ key: "left-spacer" }, ...movies, { key: "right-spacer" }]);
+            console.log(`Movies works & ${movieType}`)
+          }
+        }
+      };
+  
+      // if (movieType === "tv") {
+      //   fetchData(movies);
+      // }
+
+      // if(movieType === "movie"){
+      //   fetchData(movies);
+      // }
+
+      // return () => {
+      //   load.current = false;
+      // };
+
+      fetchData(movies)
+
+  }, [movieType]);
 
   const renderRow = ({ item, index }) => {
     if (!item.poster) {
@@ -76,7 +94,6 @@ const HomeScreen = ({ navigation }) => {
         >
           <TouchableOpacity
             onPress={() => {
-              setMovieType("movie")
               navigation.navigate("TrailerScreen", { item: item })
             }}
             style={[styles.posterImage, { elevation: 2 }]}
@@ -90,7 +107,7 @@ const HomeScreen = ({ navigation }) => {
               fontFamily: "Medium",
             }}
           >
-            {item.trans_title}
+            {item.trans_title || item.title}
           </Text>
 
           <Rating rating={item.rating} />
@@ -101,6 +118,11 @@ const HomeScreen = ({ navigation }) => {
   };
   const keyExtractor = (item) => item.key;
 
+  const options = [
+    { label: "Фільми", value: "movie" },
+    { label: "Серіали", value: "tv" },
+  ];
+
   return (
     <SafeAreaView style={styles.container}>
       <Backdrop
@@ -110,7 +132,22 @@ const HomeScreen = ({ navigation }) => {
         ITEM_SIZE={ITEM_SIZE}
         scrollx={scrollx}
       />
-
+      <View style={styles.switchContainer}>
+        <View style={styles.switchSelector}>
+          <SwitchSelector
+            options={options}
+            initial={0}
+            hasPadding
+            buttonColor="#23BAD6"
+            borderColor="#23BAD6"
+            // backgroundColor="transparent"
+            onPress={value => {
+              setMovieType(value)
+              load.current = true
+            }}
+          />
+        </View>
+      </View>
       <Animated.FlatList
         data={movies}
         keyExtractor={keyExtractor}
@@ -148,4 +185,11 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     marginBottom: 10,
   },
+  switchContainer: {
+    justifyContent: "center",
+    flexDirection: "row"
+  },
+  switchSelector: {
+    width: "50%",
+  }
 });
