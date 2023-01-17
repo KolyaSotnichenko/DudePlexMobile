@@ -69,7 +69,7 @@ const SearchScreen = ({navigation}) => {
     
     return (
       <TouchableOpacity
-        onPress={() => navigation.navigate("MovieScreen", { item, search: true })}>
+        onPress={() => navigation.navigate("TrailerScreen", { item, search: true })}>
         <LinearGradient
           colors={["#373636", "#1C1B1A", "#1C1B1A"]}
           start={{ x: 0.0, y: 0.25 }}
@@ -122,54 +122,54 @@ const SearchScreen = ({navigation}) => {
     );
   };
   return (
-    <SafeAreaView style={styles.container}>
       <LinearGradient
         colors={["#181818", "#0F0F0F", "#0C0C0C"]}
         style={styles.container}
       >
-        <Searchbar
-          style={styles.searchbar}
-          value={inputSearch}
-          onChangeText={(e) => handleSearch(e)}
-          placeholderTextColor="#fff"
-          iconColor="#fff"
-          placeholder={provider === "movies" ? "Знайти фільм" : "Знайти серіал"}
-          color="#fff"
-        />
+        <SafeAreaView style={styles.container}>
+          <Searchbar
+            style={styles.searchbar}
+            value={inputSearch}
+            onChangeText={(e) => handleSearch(e)}
+            placeholderTextColor="#fff"
+            iconColor="#fff"
+            placeholder={provider === "movies" ? "Знайти фільм" : "Знайти серіал"}
+            color="#fff"
+          />
 
-        <View style={styles.tabs}>
-          <Text style={provider === "movies" ? {fontWeight: 'bold', color: 'royalblue', borderWidth: '1px', borderRadius: 10, paddingTop: 10, paddingBottom: 10, paddingLeft: 15, paddingRight: 15, borderColor: 'royalblue'} : {color: '#fff'}} onPress={() => {
-            setInputSearch("")
-            setMovies(null)
-            setProvider("movies")
-            setMovieType("movie")
-          }}>Фільми</Text>
-          <Text style={provider === "tvs" ? {fontWeight: 'bold', color: 'royalblue', borderWidth: '1px', borderRadius: 10, paddingTop: 10, paddingBottom: 10, paddingLeft: 15, paddingRight: 15, borderColor: 'royalblue'} : {color: '#fff'}} onPress={() => {
-            setInputSearch("")
-            setMovies(null)
-            setProvider("tvs")
-            setMovieType("tv")
-          }}>Серіали</Text>
-        </View>
+          <View style={styles.tabs}>
+            <Text style={provider === "movies" ? {fontWeight: 'bold', color: 'royalblue', borderWidth: '1px', borderRadius: 10, paddingTop: 10, paddingBottom: 10, paddingLeft: 15, paddingRight: 15, borderColor: 'royalblue'} : {color: '#fff'}} onPress={() => {
+              setInputSearch("")
+              setMovies(null)
+              setProvider("movies")
+              setMovieType("movie")
+            }}>Фільми</Text>
+            <Text style={provider === "tvs" ? {fontWeight: 'bold', color: 'royalblue', borderWidth: '1px', borderRadius: 10, paddingTop: 10, paddingBottom: 10, paddingLeft: 15, paddingRight: 15, borderColor: 'royalblue'} : {color: '#fff'}} onPress={() => {
+              setInputSearch("")
+              setMovies(null)
+              setProvider("tvs")
+              setMovieType("tv")
+            }}>Серіали</Text>
+          </View>
 
-        <FlatList
-          data={movies}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => index.toString()}
-          ListFooterComponent={() => {
-            return (
-              <View
-                style={{
-                  marginBottom: 50,
-                }}
-              />
-            );
-          }}
-          renderItem={renderSearchRow}
-        />
+          <FlatList
+            data={movies}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item, index) => index.toString()}
+            ListFooterComponent={() => {
+              return (
+                <View
+                  style={{
+                    marginBottom: 50,
+                  }}
+                />
+              );
+            }}
+            renderItem={renderSearchRow}
+          />
+        </SafeAreaView>
       </LinearGradient>
-    </SafeAreaView>
   );
 };
 
@@ -181,7 +181,6 @@ const styles = StyleSheet.create({
     width: width,
     height: height,
     alignItems: "center",
-    backgroundColor: '#1C1B1A'
   },
 
   searchbar: {

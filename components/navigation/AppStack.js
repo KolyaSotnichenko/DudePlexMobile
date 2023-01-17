@@ -5,7 +5,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import HomeScreen from "../../screens/HomeScreen";
 import ProfileScreen from "../../screens/ProfileScreen";
-import DiscoverScreen from "../../screens/DiscoverScreen";
+// import DiscoverScreen from "../../screens/DiscoverScreen";
+import BookmarksScreen from "../../screens/BookmarksScreen";
 import SearchScreen from "../../screens/SearchScreen";
 import CustomTabBar from "./CustomTabBar";
 
@@ -17,7 +18,7 @@ const AppStack = () => {
       <Tab.Navigator tabBar={(props) => <CustomTabBar {...props} />}>
         <Tab.Screen name="MainHomeScreen" component={MainScreen} />
         <Tab.Screen name="SearchScreen" component={SearchScreen} />
-        <Tab.Screen name="DiscoverScreen" component={DiscoverScreen} />
+        <Tab.Screen name="BookmarksScreen" component={BookmarksScreen} />
         <Tab.Screen name="ProfileScreen" component={ProfileScreen} />
       </Tab.Navigator>
     </>

@@ -6,7 +6,7 @@ import TabIcons from "./TabIcons";
 const { width, height } = Dimensions.get("screen");
 
 const CustomTabBar = ({ state, navigation }) => {
-  let icons_name = ["film", "search", "tv", "user"];
+  let icons_name = ["film", "search", "bookmark", "user"];
   const color_tab = ["#181822", "#1a1a24", "#202124", "#202124"];
 
   return (
