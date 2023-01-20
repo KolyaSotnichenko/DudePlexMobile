@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import firebase from "firebase";
-import db from "firebase/firestore"
+import { AuthContext } from "../../components/context";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -22,6 +22,7 @@ const initialValues = {
   confirmPassword: "",
 };
 const SignUpScreen = ({ navigation }) => {
+  const { signIn } = useContext(AuthContext);
   const [values, setValues] = useState(initialValues);
   const handleInputChange = (name, value) => {
     if (value === "email") {
@@ -58,6 +59,10 @@ const SignUpScreen = ({ navigation }) => {
             firebase.firestore().collection("mobile_users").doc(result.user.uid).set({
               id: result.user.uid,
               name: result.user.email
+            })
+            firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(result => {
+              signIn(result.user.refreshToken);
             })
           })
         .catch((err) => {
