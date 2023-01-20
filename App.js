@@ -18,7 +18,8 @@ function App() {
     projectId: "dudeplex-d3943",
     storageBucket: "dudeplex-d3943.appspot.com",
     messagingSenderId: "14565264809",
-    appId: "1:14565264809:web:57b224fa449bcdd848c8b8"
+    appId: "1:14565264809:web:57b224fa449bcdd848c8b8",
+    databaseURL: "https://dudeplex-d3943-default-rtdb.europe-west1.firebasedatabase.app"
   };
   if (firebase.apps.length === 0) {
     firebase.initializeApp(firebaseConfig);

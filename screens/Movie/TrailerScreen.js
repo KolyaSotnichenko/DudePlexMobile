@@ -22,16 +22,8 @@ import { MovieType } from "../../components/contextMovieType";
 // import {Hypnosis} from "react-cssfx-loading";
 
 import firebase from "firebase";
-import {
-  arrayRemove,
-  arrayUnion,
-  doc,
-  onSnapshot,
-  updateDoc,
-} from "firebase/firestore";
 
 const { width, height } = Dimensions.get("screen");
-// const BUTTON_WIDTH = width / 2;
 
 const wait = (timeout) => {
   return new Promise(resolve => setTimeout(resolve, timeout));
@@ -45,6 +37,7 @@ const TrailerScreen = ({ route }) => {
   const [movieType, setMovieType] = useContext(MovieType)
   const [isLoaded, setIsLoaded] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
+  const [isBookmarked, setIsBookmarked] = useState(false)
 
   let data = route.params.item;
 
@@ -79,6 +72,15 @@ const TrailerScreen = ({ route }) => {
   }
 
   useEffect(() => {
+    firebase.firestore().collection("mobile_users").doc(firebase.auth().currentUser?.uid).get()
+      .then(doc => {
+        setIsBookmarked(
+          doc.data()?.bookmarks.some(item => item.key === data?.key)
+        )
+      })
+  }, [data?.key])
+
+  useEffect(() => {
     fetch(externalIDSMovie)
       .then(data => {
         setImdbID(data.json())
@@ -86,7 +88,6 @@ const TrailerScreen = ({ route }) => {
     fetch(externalIDSTV)
       .then(data => {
         setImdbIDTV(data.json())
-        console.log(imdbIDTV?._z?.imdb_id)
       })
   },[])
 
@@ -167,13 +168,32 @@ const TrailerScreen = ({ route }) => {
 
   const bookmarkedHandler = async () => {
     await firebase.firestore().collection("mobile_users").doc(firebase.auth().currentUser?.uid).update({
-      bookmarks: 
-        firebase.firestore.FieldValue.arrayUnion({
-          poster_path: data?.poster,
-          id: data?.key,
-          vote_average: data?.rating,
+      bookmarks: !isBookmarked
+        ? firebase.firestore.FieldValue.arrayUnion({
           media_type: movieType,
-          title: data?.trans_title,
+          key: data?.key,
+          title: data?.title,
+          poster: data?.poster,
+          backdrop: data?.backdrop,
+          rating: data?.rating,
+          description: data?.description,
+          releaseDate: data?.releaseDate,
+          YoutubeKey: data?.YoutubeKey,
+          genres: data?.genres,
+          trans_title: data?.trans_title,
+        })
+        : firebase.firestore.FieldValue.arrayRemove({
+          media_type: movieType,
+          key: data?.key,
+          title: data?.title,
+          poster: data?.poster,
+          backdrop: data?.backdrop,
+          rating: data?.rating,
+          description: data?.description,
+          releaseDate: data?.releaseDate,
+          YoutubeKey: data?.YoutubeKey,
+          genres: data?.genres,
+          trans_title: data?.trans_title,
         })
     })
   }
@@ -249,16 +269,29 @@ const TrailerScreen = ({ route }) => {
           <TouchableOpacity
             onPress={bookmarkedHandler}
           >
-            <Icons.Feather
-              name="bookmark"
-              size={30}
-              color="#fff"
-              style={{
-                justifyContent: "flex-start",
-                marginRight: 10,
-                marginTop: -30,
-              }}
-            />
+            {isBookmarked ? (
+              <Icons.FontAwesome
+                name="bookmark"
+                size={30}
+                color='#23BAD6'
+                style={{
+                  justifyContent: "flex-start",
+                  marginRight: 10,
+                  marginTop: -30,
+                }}
+              />
+            ) : (
+              <Icons.Feather 
+                name="bookmark"
+                size={30}
+                color='#fff'
+                style={{
+                  justifyContent: "flex-start",
+                  marginRight: 10,
+                  marginTop: -30,
+                }}
+              />
+            )}
           </TouchableOpacity>
         </View>
         <View style={{ alignItems: "center", marginTop: 5 }}>

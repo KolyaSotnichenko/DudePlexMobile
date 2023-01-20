@@ -35,6 +35,7 @@ const SearchScreen = ({navigation}) => {
   const fetchData = async (text) => {
 
     if(provider === "movies"){
+      setMovieType('movie')
       return await fetch(API_URL_MOVIES).then(res => res.json())
     }else{
       return await fetch(API_URL_TVS).then(res => res.json())
