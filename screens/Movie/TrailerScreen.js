@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
   Dimensions,
   RefreshControl,
+  TouchableOpacity,
 } from "react-native";
 // import YoutubePlayer from "react-native-youtube-iframe";
 import WebView from "react-native-webview";
@@ -19,6 +20,15 @@ import Rating from "../FooterComponent/Rating";
 import { API_KEY, genres, getYoutubeKey } from "../../models/api";
 import { MovieType } from "../../components/contextMovieType";
 // import {Hypnosis} from "react-cssfx-loading";
+
+import firebase from "firebase";
+import {
+  arrayRemove,
+  arrayUnion,
+  doc,
+  onSnapshot,
+  updateDoc,
+} from "firebase/firestore";
 
 const { width, height } = Dimensions.get("screen");
 // const BUTTON_WIDTH = width / 2;
@@ -155,6 +165,19 @@ const TrailerScreen = ({ route }) => {
     }
   }
 
+  const bookmarkedHandler = async () => {
+    await firebase.firestore().collection("mobile_users").doc(firebase.auth().currentUser?.uid).update({
+      bookmarks: 
+        firebase.firestore.FieldValue.arrayUnion({
+          poster_path: data?.poster,
+          id: data?.key,
+          vote_average: data?.rating,
+          media_type: movieType,
+          title: data?.trans_title,
+        })
+    })
+  }
+
 
 
   return (
@@ -223,16 +246,20 @@ const TrailerScreen = ({ route }) => {
           />
         </View>
         <View style={{ alignItems: "flex-end" }}>
-          <Icons.Feather
-            name="bookmark"
-            size={30}
-            color="#fff"
-            style={{
-              justifyContent: "flex-start",
-              marginRight: 10,
-              marginTop: -30,
-            }}
-          />
+          <TouchableOpacity
+            onPress={bookmarkedHandler}
+          >
+            <Icons.Feather
+              name="bookmark"
+              size={30}
+              color="#fff"
+              style={{
+                justifyContent: "flex-start",
+                marginRight: 10,
+                marginTop: -30,
+              }}
+            />
+          </TouchableOpacity>
         </View>
         <View style={{ alignItems: "center", marginTop: 5 }}>
           <Text
