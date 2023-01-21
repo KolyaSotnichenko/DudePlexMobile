@@ -135,7 +135,7 @@ const ProfileScreen = () => {
               fontSize: 16,
             }}
           >
-            Coming soon!🥰
+            Функціонал ще в розробці🥰
           </Text>
         </LinearGradient>
       </View>

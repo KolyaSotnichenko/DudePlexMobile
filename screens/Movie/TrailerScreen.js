@@ -259,8 +259,8 @@ const TrailerScreen = ({ route }) => {
                 }}
               />
             ) : (
-              <Icons.Feather 
-                name="bookmark"
+              <Icons.FontAwesome 
+                name="bookmark-o"
                 size={30}
                 color='#fff'
                 style={{
