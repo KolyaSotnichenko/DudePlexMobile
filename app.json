@@ -21,8 +21,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.ayushcompany.movieapp"
+      "supportsTablet": false,
+      "bundleIdentifier": "com.kolyasotnichenko.dudeplexmobile"
     },
     "android": {
       "package": "com.kolyasotnichenko.dudeplexmobile",
