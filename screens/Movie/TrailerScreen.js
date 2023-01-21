@@ -72,23 +72,29 @@ const TrailerScreen = ({ route }) => {
   }
 
   useEffect(() => {
-    if (fromSearch === true) {
-      firebase.firestore().collection('mobile_users').doc(firebase.auth().currentUser?.uid)
-        .onSnapshot(doc => {
-          setIsBookmarked(
-            doc.data()?.bookmarks.some(item => item.key === data?.id)
-          )
-        })
-    } else {
-      firebase.firestore().collection('mobile_users').doc(firebase.auth().currentUser?.uid)
-        .onSnapshot(doc => {
-          setIsBookmarked(
-            doc.data()?.bookmarks.some(item => item.key === data?.key)
-          )
-        })
-    }
+    firebase.auth().onAuthStateChanged(user => {
+      if(user){
+        if (fromSearch === true) {
+          firebase.firestore().collection('mobile_users').doc(firebase.auth().currentUser?.uid)
+            .onSnapshot(doc => {
+              setIsBookmarked(
+                doc.data()?.bookmarks.some(item => item.key === data?.id)
+              )
+            })
+        } else {
+          firebase.firestore().collection('mobile_users').doc(firebase.auth().currentUser?.uid)
+            .onSnapshot(doc => {
+              setIsBookmarked(
+                doc.data()?.bookmarks.some(item => item.key === data?.key)
+              )
+            })
+        }
+      }else{
+        console.log('error trailer screen')
+      }
+    })
 
-  }, [isBookmarked])
+  }, [firebase.auth().currentUser?.uid])
 
   useEffect(() => {
     fetch(externalIDSMovie)
@@ -185,31 +191,30 @@ const TrailerScreen = ({ route }) => {
           ? firebase.firestore.FieldValue.arrayUnion({
             media_type: movieType,
             key: data?.id,
-            title: data?.original_title,
+            title: data?.original_title | data?.original_name,
             poster: data?.poster_path,
             backdrop: data?.backdrop_path,
             rating: data?.vote_average,
             description: data?.overview,
-            ...(movieType === "movie" && { releaseDate: data?.release_date }),
-            ...(movieType === "tv" && { releaseDate: data?.first_air_date }),
-            genres: data?.genre_ids,
-            trans_title: data?.title,
+            releaseDate: data?.release_date | data?.first_air_date,
+            genres: data?.genre_ids | undefined,
+            trans_title: data?.title | data?.name,
           })
           : firebase.firestore.FieldValue.arrayRemove({
             media_type: movieType,
             key: data?.id,
-            title: data?.original_title,
+            title: data?.original_title | data?.original_name,
             poster: data?.poster_path,
             backdrop: data?.backdrop_path,
             rating: data?.vote_average,
             description: data?.overview,
-            ...(movieType === "movie" && { releaseDate: data?.release_date }),
-            ...(movieType === "tv" && { releaseDate: data?.first_air_date }),
-            genres: data?.genre_ids,
-            trans_title: data?.title,
+            releaseDate: data?.release_date | data?.first_air_date,
+            genres: data?.genre_ids | undefined,
+            trans_title: data?.title | data?.name,
           })
       })
     } else {
+      console.log('ok')
       await firebase.firestore().collection("mobile_users").doc(firebase.auth().currentUser?.uid).update({
         bookmarks: !isBookmarked
           ? firebase.firestore.FieldValue.arrayUnion({
@@ -221,7 +226,7 @@ const TrailerScreen = ({ route }) => {
             rating: data?.rating,
             description: data?.description,
             releaseDate: data?.releaseDate,
-            genres: data?.genres,
+            genres: data?.genres | undefined,
             trans_title: data?.trans_title,
           })
           : firebase.firestore.FieldValue.arrayRemove({
@@ -233,7 +238,7 @@ const TrailerScreen = ({ route }) => {
             rating: data?.rating,
             description: data?.description,
             releaseDate: data?.releaseDate,
-            genres: data?.genres,
+            genres: data?.genres | undefined,
             trans_title: data?.trans_title,
           })
       })

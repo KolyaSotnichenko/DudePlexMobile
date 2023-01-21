@@ -29,7 +29,7 @@ const BookmarksScreen = ({navigation}) => {
     firebase.firestore().collection('mobile_users').doc(firebase.auth().currentUser?.uid)
       .onSnapshot(doc => {
         if(doc.exists){
-          const data = doc.data().bookmarks
+          const data = doc.data().bookmarks.slice().reverse()
           setMovies(data)
           console.log('ok')
         }
