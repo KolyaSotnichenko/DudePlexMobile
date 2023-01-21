@@ -31,7 +31,7 @@ const ProfileScreen = () => {
     >
       <View style={{ alignItems: "center", marginTop: 20 }}>
         <Image
-          source={require("../assets/images/unsplashMan.png")}
+          source={require("../assets/images/unsplashMan.jpg")}
           style={styles.img_style}
         />
         <Text
