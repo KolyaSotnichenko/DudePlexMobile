@@ -14,9 +14,9 @@ const BookmarksScreen = ({navigation}) => {
   useEffect(() => {
 
     fetchBookmarkList()
-    console.log(movies)
+    console.log(movies.length)
     
-  }, [])
+  }, [movies.length])
 
   const fetchBookmarkList = async () => {
     firebase.firestore().collection('mobile_users').doc(firebase.auth().currentUser?.uid)
