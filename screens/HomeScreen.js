@@ -44,18 +44,6 @@ const HomeScreen = ({ navigation }) => {
           }
         }
       };
-  
-      // if (movieType === "tv") {
-      //   fetchData(movies);
-      // }
-
-      // if(movieType === "movie"){
-      //   fetchData(movies);
-      // }
-
-      // return () => {
-      //   load.current = false;
-      // };
 
       fetchData(movies)
 
