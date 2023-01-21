@@ -288,7 +288,7 @@ const TrailerScreen = ({ route }) => {
             {date[0]} | {fromSearch === true ? genres[data.genre_ids[0]] : data.genres[0] && data.genres[1]}
           </Text>
         </View>
-        {data.overview !== null  || data.description !== null && (
+        {(data.overview !== null  || data.description !== null) && (
           <View
             style={{
               marginLeft: 10,
