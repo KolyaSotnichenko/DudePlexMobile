@@ -234,38 +234,16 @@ const TrailerScreen = ({ route }) => {
             <ActivityIndicator />
           </View>
         )}
-
-
-        {/* {movieType === "movie" && isLoaded ? (
-          <WebView 
-            source={{ html: `<body style="margin: 0 !important"><iframe width="100%" height="100%" src="https://3442534688564.svetacdn.in/msNIXXBblTTU?imdb_id=${imdbID?._z?.imdb_id}" frameborder="0" allowfullscreen/></body>` }} 
-            style={{width: width, height: height/3, padding: 0}}
-          />
-        ): (
-          <View>
-            <ActivityIndicator />
-          </View>
-        )} 
-        {movieType === "tv" && isLoaded ? (
-          <WebView 
-            source={{ html: `<body style="margin: 0 !important"><iframe width="100%" height="100%" src="https://3442534688564.svetacdn.in/msNIXXBblTTU?imdb_id=${imdbIDTV?._z?.imdb_id}" frameborder="0" allowfullscreen/></body>` }} 
-            style={{width: width, height: height/3, padding: 0}}
-          />
-        ) : (
-          <View style={{width: width, height: height/3}}>
-            <ActivityIndicator />
-          </View>
-        )} */}
         
-        <View style={{ marginTop: 30 }}>
+        {/* <View style={{ marginTop: 30 }}>
           <Icons.Feather
             name="heart"
             size={30}
             color="#fff"
             style={{ alignItems: "flex-start", marginLeft: 10, marginTop: -9 }}
           />
-        </View>
-        <View style={{ alignItems: "flex-end" }}>
+        </View> */}
+        <View style={{ marginTop: 60, alignItems: "flex-end" }}>
           <TouchableOpacity
             onPress={bookmarkedHandler}
           >
@@ -310,90 +288,95 @@ const TrailerScreen = ({ route }) => {
             {date[0]} | {fromSearch === true ? genres[data.genre_ids[0]] : data.genres[0] && data.genres[1]}
           </Text>
         </View>
-        <View
-          style={{
-            marginLeft: 10,
-            flexWrap: "wrap",
-            flex: 1,
-            flexDirection: "row",
-          }}
-        >
-          <Text
+        {data.overview  || data.description && (
+          <View
             style={{
-              color: "#fff",
-              fontFamily: "SemiBold",
-              fontSize: 18,
-              marginTop: 5,
+              marginLeft: 10,
+              flexWrap: "wrap",
+              flex: 1,
+              flexDirection: "row",
             }}
           >
-            Огляд
-          </Text>
-          <Text
-            style={{
-              color: "#fff",
-              textAlign: "left",
-              fontFamily: "Medium",
-            }}
-          >
-            {/* {fromSearch === true ? data.overview : data.description} */}
-            {data.overview  || data.description ? data.overview || data.description : null}
-          </Text>
-        </View>
-        <Text
-          style={{
-            color: "#fff",
-            fontFamily: "SemiBold",
-            textAlign: "left",
-            marginLeft: 10,
-            marginTop: 10,
-            fontSize: 18,
-          }}
-        >
-          Акторський склад
-        </Text>
+            <Text
+              style={{
+                color: "#fff",
+                fontFamily: "SemiBold",
+                fontSize: 18,
+                marginTop: 5,
+              }}
+            >
+              Огляд
+            </Text>
+            <Text
+              style={{
+                color: "#fff",
+                textAlign: "left",
+                fontFamily: "Medium",
+              }}
+            >
+              {data.overview  || data.description ? data.overview || data.description : null}
+            </Text>
+          </View>
+        )}
+        {cast && (
+          <>
+            <Text
+              style={{
+                color: "#fff",
+                fontFamily: "SemiBold",
+                textAlign: "left",
+                marginLeft: 10,
+                marginTop: 10,
+                fontSize: 18,
+              }}
+            >
+              Акторський склад
+            </Text>
 
-        <View style={{ flexDirection: "row", marginBottom: 20 }}>
-          <FlatList
-            horizontal
-            data={cast}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={(item, index) => {
-              return (
-                <>
-                  <View
-                    style={{
-                      flexDirection: "column",
-                    }}
-                  >
-                    <View
-                      style={{
-                        backgroundColor: "#fff",
-                        width: 100,
-                        height: 160,
-                        margin: 10,
-                        marginRight: 20,
-                        borderRadius: 10,
-                      }}
-                    >
-                      <Image
+            <View style={{ flexDirection: "row", marginBottom: 20 }}>
+              <FlatList
+                horizontal
+                data={cast}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={(item, index) => {
+                  return (
+                    <>
+                      <View
                         style={{
-                          flex: 1,
-                          height: undefined,
-                          width: undefined,
-                          borderRadius: 10,
+                          flexDirection: "column",
                         }}
-                        source={{
-                          uri: `https://image.tmdb.org/t/p/w500${item.item.profile_path}`,
-                        }}
-                      />
-                    </View>
-                    <Text style={styles.castName}>{item.item.name}</Text>
-                  </View>
-                </>
-              );
-            }}
-          />
-        </View>
+                      >
+                        <View
+                          style={{
+                            backgroundColor: "#fff",
+                            width: 100,
+                            height: 160,
+                            margin: 10,
+                            marginRight: 20,
+                            borderRadius: 10,
+                          }}
+                        >
+                          <Image
+                            style={{
+                              flex: 1,
+                              height: undefined,
+                              width: undefined,
+                              borderRadius: 10,
+                            }}
+                            source={{
+                              uri: `https://image.tmdb.org/t/p/w500${item.item.profile_path}`,
+                            }}
+                          />
+                        </View>
+                        <Text style={styles.castName}>{item.item.name}</Text>
+                      </View>
+                    </>
+                  );
+                }}
+              />
+            </View>
+        </>
+        )}
         {/* <View style={{ marginTop: 15 }}>
           <Text
             style={{
