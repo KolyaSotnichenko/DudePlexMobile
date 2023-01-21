@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "splash": {
-      "image": "./assets/logo.png",
+      "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#0e0e0e",
       "android": {
@@ -28,7 +28,7 @@
       "package": "com.kolyasotnichenko.dudeplexmobile",
       "versionCode": 1,
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
+        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0E0E0E"
       }
     },
