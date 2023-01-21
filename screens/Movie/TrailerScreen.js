@@ -43,28 +43,28 @@ const TrailerScreen = ({ route }) => {
 
   let fromSearch = route.params.search;
 
-  let YoutubeUrl;
+  // let YoutubeUrl;
 
-  if(fromSearch === true){
-    YoutubeUrl = getYoutubeKey(data.id);
-  }else{
-    YoutubeUrl = data.YoutubeKey;
-  }
+  // if(fromSearch === true){
+  //   YoutubeUrl = getYoutubeKey(data.id);
+  // }else{
+  //   YoutubeUrl = data.YoutubeKey;
+  // }
   const CastUrl = `https://api.themoviedb.org/3/movie/${data.key | data.id}/credits?api_key=${API_KEY}&language=uk-UA`;
   const externalIDSMovie = `https://api.themoviedb.org/3/movie/${data.key | data.id}/external_ids?api_key=${API_KEY}`
   const externalIDSTV = `https://api.themoviedb.org/3/tv/${data.key | data.id}/external_ids?api_key=${API_KEY}&language=uk-UA`
 
   let date;
 
-  if(fromSearch === true){
-    if(movieType === "tv"){
+  if (fromSearch === true) {
+    if (movieType === "tv") {
       date = data.first_air_date.split("-");
     }
-    else{
+    else {
       date = data.release_date.split("-")
     }
-  }else{
-    if(movieType === "tv"){
+  } else {
+    if (movieType === "tv") {
       date = data.releaseDate.split("-");
     }
 
@@ -72,13 +72,23 @@ const TrailerScreen = ({ route }) => {
   }
 
   useEffect(() => {
-    firebase.firestore().collection('mobile_users').doc(firebase.auth().currentUser?.uid)
-      .onSnapshot(doc => {
-        setIsBookmarked(
-          doc.data()?.bookmarks.some(item => item.key === data?.key)
-        )
-      })
-  }, [])
+    if (fromSearch === true) {
+      firebase.firestore().collection('mobile_users').doc(firebase.auth().currentUser?.uid)
+        .onSnapshot(doc => {
+          setIsBookmarked(
+            doc.data()?.bookmarks.some(item => item.key === data?.id)
+          )
+        })
+    } else {
+      firebase.firestore().collection('mobile_users').doc(firebase.auth().currentUser?.uid)
+        .onSnapshot(doc => {
+          setIsBookmarked(
+            doc.data()?.bookmarks.some(item => item.key === data?.key)
+          )
+        })
+    }
+
+  }, [isBookmarked])
 
   useEffect(() => {
     fetch(externalIDSMovie)
@@ -89,7 +99,7 @@ const TrailerScreen = ({ route }) => {
       .then(data => {
         setImdbIDTV(data.json())
       })
-  },[])
+  }, [])
 
   useEffect(() => {
     Promise.all([fetch(CastUrl)])
@@ -121,18 +131,18 @@ const TrailerScreen = ({ route }) => {
   }, [isLoaded, imdbID?._z?.imdb_id, imdbIDTV?._z?.imdb_id, onRefresh])
 
   const compareIds = async () => {
-    if(movieType === "movie"){
-      if(imdbID?._z?.imdb_id){
-        await fetch(`https://videocdn.tv/api/movies?api_token=IISbfTsMm42mRk7dtPxB5zmhEfK3YKau&imdb_id=${imdbID?._z?.imdb_id}`, {headers: {'Access-Control-Allow-Origin': '*' }})
+    if (movieType === "movie") {
+      if (imdbID?._z?.imdb_id) {
+        await fetch(`https://videocdn.tv/api/movies?api_token=IISbfTsMm42mRk7dtPxB5zmhEfK3YKau&imdb_id=${imdbID?._z?.imdb_id}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
           .then(response => {
-            if(response.ok){
+            if (response.ok) {
               return response.json()
             }
 
             throw response
           })
           .then(data => {
-            if(data["data"] != null){
+            if (data["data"] != null) {
               setIsLoaded(true)
             }
           })
@@ -143,18 +153,18 @@ const TrailerScreen = ({ route }) => {
       }
     }
 
-    if(movieType === "tv"){
-      if(imdbIDTV?._z?.imdb_id){
-        await fetch(`https://videocdn.tv/api/tv-series?api_token=IISbfTsMm42mRk7dtPxB5zmhEfK3YKau&imdb_id=${imdbIDTV?._z?.imdb_id}`, {headers: {'Access-Control-Allow-Origin': '*' }})
+    if (movieType === "tv") {
+      if (imdbIDTV?._z?.imdb_id) {
+        await fetch(`https://videocdn.tv/api/tv-series?api_token=IISbfTsMm42mRk7dtPxB5zmhEfK3YKau&imdb_id=${imdbIDTV?._z?.imdb_id}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
           .then(response => {
-            if(response.ok){
+            if (response.ok) {
               return response.json()
             }
 
             throw response
           })
           .then(data => {
-            if(data["data"] != null){
+            if (data["data"] != null) {
               setIsLoaded(true)
             }
           })
@@ -166,36 +176,68 @@ const TrailerScreen = ({ route }) => {
     }
   }
 
+  console.log(data)
+
   const bookmarkedHandler = async () => {
-    await firebase.firestore().collection("mobile_users").doc(firebase.auth().currentUser?.uid).update({
-      bookmarks: !isBookmarked
-        ? firebase.firestore.FieldValue.arrayUnion({
-          media_type: movieType,
-          key: data?.key,
-          title: data?.title,
-          poster: data?.poster,
-          backdrop: data?.backdrop,
-          rating: data?.rating,
-          description: data?.description,
-          releaseDate: data?.releaseDate,
-          YoutubeKey: data?.YoutubeKey,
-          genres: data?.genres,
-          trans_title: data?.trans_title,
-        })
-        : firebase.firestore.FieldValue.arrayRemove({
-          media_type: movieType,
-          key: data?.key,
-          title: data?.title,
-          poster: data?.poster,
-          backdrop: data?.backdrop,
-          rating: data?.rating,
-          description: data?.description,
-          releaseDate: data?.releaseDate,
-          YoutubeKey: data?.YoutubeKey,
-          genres: data?.genres,
-          trans_title: data?.trans_title,
-        })
-    })
+    if (fromSearch === true) {
+      await firebase.firestore().collection("mobile_users").doc(firebase.auth().currentUser?.uid).update({
+        bookmarks: !isBookmarked
+          ? firebase.firestore.FieldValue.arrayUnion({
+            media_type: movieType,
+            key: data?.id,
+            title: data?.original_title,
+            poster: data?.poster_path,
+            backdrop: data?.backdrop_path,
+            rating: data?.vote_average,
+            description: data?.overview,
+            ...(movieType === "movie" && { releaseDate: data?.release_date }),
+            ...(movieType === "tv" && { releaseDate: data?.first_air_date }),
+            genres: data?.genre_ids,
+            trans_title: data?.title,
+          })
+          : firebase.firestore.FieldValue.arrayRemove({
+            media_type: movieType,
+            key: data?.id,
+            title: data?.original_title,
+            poster: data?.poster_path,
+            backdrop: data?.backdrop_path,
+            rating: data?.vote_average,
+            description: data?.overview,
+            ...(movieType === "movie" && { releaseDate: data?.release_date }),
+            ...(movieType === "tv" && { releaseDate: data?.first_air_date }),
+            genres: data?.genre_ids,
+            trans_title: data?.title,
+          })
+      })
+    } else {
+      await firebase.firestore().collection("mobile_users").doc(firebase.auth().currentUser?.uid).update({
+        bookmarks: !isBookmarked
+          ? firebase.firestore.FieldValue.arrayUnion({
+            media_type: movieType,
+            key: data?.key,
+            title: data?.title,
+            poster: data?.poster,
+            backdrop: data?.backdrop,
+            rating: data?.rating,
+            description: data?.description,
+            releaseDate: data?.releaseDate,
+            genres: data?.genres,
+            trans_title: data?.trans_title,
+          })
+          : firebase.firestore.FieldValue.arrayRemove({
+            media_type: movieType,
+            key: data?.key,
+            title: data?.title,
+            poster: data?.poster,
+            backdrop: data?.backdrop,
+            rating: data?.rating,
+            description: data?.description,
+            releaseDate: data?.releaseDate,
+            genres: data?.genres,
+            trans_title: data?.trans_title,
+          })
+      })
+    }
   }
 
 
@@ -205,7 +247,7 @@ const TrailerScreen = ({ route }) => {
       colors={["#181818", "#0F0F0F", "#0C0C0C"]}
       style={styles.container}
     >
-      <ScrollView 
+      <ScrollView
         stickyHeaderIndices={[0]}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -213,28 +255,28 @@ const TrailerScreen = ({ route }) => {
       >
         {/* <YoutubePlayer height={300} videoId={youtube} /> */}
 
-        {movieType === "movie" ? 
+        {movieType === "movie" ?
           isLoaded ? (
-            <WebView 
-              source={{ html: `<body style="margin: 0 !important"><iframe width="100%" height="100%" src="https://3442534688564.svetacdn.in/msNIXXBblTTU?imdb_id=${imdbID?._z?.imdb_id}" frameborder="0" allowfullscreen/></body>` }} 
-              style={{width: width, height: height/3, padding: 0}}
+            <WebView
+              source={{ html: `<body style="margin: 0 !important"><iframe width="100%" height="100%" src="https://3442534688564.svetacdn.in/msNIXXBblTTU?imdb_id=${imdbID?._z?.imdb_id}" frameborder="0" allowfullscreen/></body>` }}
+              style={{ width: width, height: height / 3, padding: 0 }}
             />
           ) : (
-            <View style={{width: width, height: height/3, flexDirection: 'row', justifyContent: 'center', alignItems: "center"}}>
+            <View style={{ width: width, height: height / 3, flexDirection: 'row', justifyContent: 'center', alignItems: "center" }}>
               <ActivityIndicator />
             </View>
           )
-        : isLoaded ? (
-          <WebView 
-            source={{ html: `<body style="margin: 0 !important"><iframe width="100%" height="100%" src="https://3442534688564.svetacdn.in/msNIXXBblTTU?imdb_id=${imdbIDTV?._z?.imdb_id}" frameborder="0" allowfullscreen/></body>` }} 
-            style={{width: width, height: height/3, padding: 0}}
-          />
-        ) : (
-          <View style={{width: width, height: height/3, flexDirection: 'row', justifyContent: 'center', alignItems: "center"}}>
-            <ActivityIndicator />
-          </View>
-        )}
-        
+          : isLoaded ? (
+            <WebView
+              source={{ html: `<body style="margin: 0 !important"><iframe width="100%" height="100%" src="https://3442534688564.svetacdn.in/msNIXXBblTTU?imdb_id=${imdbIDTV?._z?.imdb_id}" frameborder="0" allowfullscreen/></body>` }}
+              style={{ width: width, height: height / 3, padding: 0 }}
+            />
+          ) : (
+            <View style={{ width: width, height: height / 3, flexDirection: 'row', justifyContent: 'center', alignItems: "center" }}>
+              <ActivityIndicator />
+            </View>
+          )}
+
         {/* <View style={{ marginTop: 30 }}>
           <Icons.Feather
             name="heart"
@@ -259,7 +301,7 @@ const TrailerScreen = ({ route }) => {
                 }}
               />
             ) : (
-              <Icons.FontAwesome 
+              <Icons.FontAwesome
                 name="bookmark-o"
                 size={30}
                 color='#fff'
@@ -288,7 +330,7 @@ const TrailerScreen = ({ route }) => {
             {date[0]} | {fromSearch === true ? genres[data.genre_ids[0]] : data.genres[0] && data.genres[1]}
           </Text>
         </View>
-        {(data.overview !== null  || data.description !== null) && (
+        {(data.overview !== undefined || data.description !== undefined) && (
           <View
             style={{
               marginLeft: 10,
@@ -314,11 +356,11 @@ const TrailerScreen = ({ route }) => {
                 fontFamily: "Medium",
               }}
             >
-              {data.overview  || data.description ? data.overview || data.description : null}
+              {data.overview || data.description ? data.overview || data.description : null}
             </Text>
           </View>
         )}
-        {cast !== null && (
+        {cast !== undefined && (
           <>
             <Text
               style={{
@@ -375,7 +417,7 @@ const TrailerScreen = ({ route }) => {
                 }}
               />
             </View>
-        </>
+          </>
         )}
         {/* <View style={{ marginTop: 15 }}>
           <Text
