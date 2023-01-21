@@ -56,20 +56,22 @@ const TrailerScreen = ({ route }) => {
 
   let date;
 
-  if (fromSearch === true) {
-    if (movieType === "tv") {
-      date = data.first_air_date.split("-");
-    }
-    else {
-      date = data.release_date.split("-")
-    }
-  } else {
-    if (movieType === "tv") {
-      date = data.releaseDate.split("-");
-    }
+  // if (fromSearch === true) {
+  //   if (movieType === "tv") {
+  //     date = data.first_air_date.split("-");
+  //   }
+  //   else {
+  //     date = data.release_date.split("-")
+  //   }
+  // } else {
+  //   if (movieType === "tv") {
+  //     date = data.releaseDate.split("-");
+  //   }
 
-    date = data.releaseDate.split("-")
-  }
+  //   date = data.releaseDate.split("-")
+  // }
+
+  console.log(data?.genre_ids || data?.genres[2])
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
@@ -182,8 +184,6 @@ const TrailerScreen = ({ route }) => {
     }
   }
 
-  console.log(data)
-
   const bookmarkedHandler = async () => {
     if (fromSearch === true) {
       await firebase.firestore().collection("mobile_users").doc(firebase.auth().currentUser?.uid).update({
@@ -191,14 +191,14 @@ const TrailerScreen = ({ route }) => {
           ? firebase.firestore.FieldValue.arrayUnion({
             media_type: movieType,
             key: data?.id,
-            title: data?.original_title | data?.original_name,
+            title: data?.original_title || data?.original_name,
             poster: data?.poster_path,
             backdrop: data?.backdrop_path,
             rating: data?.vote_average,
             description: data?.overview,
             releaseDate: data?.release_date | data?.first_air_date,
             genres: data?.genre_ids | undefined,
-            trans_title: data?.title | data?.name,
+            trans_title: data?.title || data?.name,
           })
           : firebase.firestore.FieldValue.arrayRemove({
             media_type: movieType,
@@ -210,7 +210,7 @@ const TrailerScreen = ({ route }) => {
             description: data?.overview,
             releaseDate: data?.release_date | data?.first_air_date,
             genres: data?.genre_ids | undefined,
-            trans_title: data?.title | data?.name,
+            trans_title: data?.title || data?.name,
           })
       })
     } else {
@@ -328,11 +328,11 @@ const TrailerScreen = ({ route }) => {
               textAlign: "center",
             }}
           >
-            {data.trans_title || data.title}
+            {data?.trans_title || data?.title || data?.name}
           </Text>
           <Rating rating={fromSearch === true ? data.vote_average : data.rating} />
           <Text style={{ color: "#fff", opacity: 0.7 }}>
-            {date[0]} | {fromSearch === true ? genres[data.genre_ids[0]] : data.genres[0] && data.genres[1]}
+            {data?.releaseDate || data?.release_date || data?.first_air_date}
           </Text>
         </View>
         {(data.overview !== undefined || data.description !== undefined) && (
