@@ -8,12 +8,13 @@ import { MovieType } from '../components/contextMovieType'
 const { width, height } = Dimensions.get("screen");
 
 const BookmarksScreen = ({navigation}) => {
-  const [movies, setMovies] = useState();
+  const [movies, setMovies] = useState([]);
   const [movieType, setMovieType] = useContext(MovieType)
 
   useEffect(() => {
 
     fetchBookmarkList()
+    console.log(movies)
     
   }, [])
 
@@ -88,24 +89,40 @@ const BookmarksScreen = ({navigation}) => {
         colors={["#181818", "#0F0F0F", "#0C0C0C"]}
         style={styles.container}
       >
-        <SafeAreaView style={styles.container}>
-        <FlatList
-            data={movies}
-            showsHorizontalScrollIndicator={false}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item, index) => index.toString()}
-            ListFooterComponent={() => {
-              return (
-                <View
-                  style={{
-                    marginBottom: 50,
-                  }}
-                />
-              );
-            }}
-            renderItem={renderBookmarkRow}
-          />
+        {movies.length !== 0 && (
+          <SafeAreaView style={styles.container}>
+              <FlatList
+                data={movies}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={(item, index) => index.toString()}
+                ListFooterComponent={() => {
+                  return (
+                    <View
+                      style={{
+                        marginBottom: 50,
+                      }}
+                    />
+                  );
+                }}
+                renderItem={renderBookmarkRow}
+              />
+          </SafeAreaView>
+        )}
+        {movies.length === 0 && (
+          <SafeAreaView style={styles.containerEmpty}>
+            <Text
+              style={{
+                color: "#fff",
+                fontFamily: "BoldItalic",
+                fontSize: 16,
+              }}
+            >
+              Ваш список порожній 😔
+            </Text>
         </SafeAreaView>
+        )}
+        
       </LinearGradient>
   )
 }
@@ -118,6 +135,13 @@ const styles = StyleSheet.create({
     width: width,
     height: height,
     alignItems: "center",
+  },
+  containerEmpty: {
+    flex: 1,
+    width: width,
+    height: height,
+    alignItems: "center",
+    justifyContent: 'center'
   },
   movie_cards: {
     flex: 1,
