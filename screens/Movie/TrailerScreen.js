@@ -288,7 +288,7 @@ const TrailerScreen = ({ route }) => {
             {date[0]} | {fromSearch === true ? genres[data.genre_ids[0]] : data.genres[0] && data.genres[1]}
           </Text>
         </View>
-        {data.overview  || data.description && (
+        {data.overview !== null  || data.description !== null && (
           <View
             style={{
               marginLeft: 10,
@@ -318,7 +318,7 @@ const TrailerScreen = ({ route }) => {
             </Text>
           </View>
         )}
-        {cast && (
+        {cast !== null && (
           <>
             <Text
               style={{
