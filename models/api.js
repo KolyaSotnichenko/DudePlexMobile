@@ -24,9 +24,9 @@ export const genres = {
 };
 
 const API_URL = `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=uk-UA&page=1`;
-const getImagePath = (path) =>
+export const getImagePath = (path) =>
   `https://image.tmdb.org/t/p/w440_and_h660_face${path}`;
-const getBackdropPath = (path) =>
+export const getBackdropPath = (path) =>
   `https://image.tmdb.org/t/p/w370_and_h556_multi_faces${path}`;
 
 export const getYoutubeKey = (movie_key) =>

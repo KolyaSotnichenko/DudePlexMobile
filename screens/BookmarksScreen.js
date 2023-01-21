@@ -9,23 +9,33 @@ const { width, height } = Dimensions.get("screen");
 
 const BookmarksScreen = ({navigation}) => {
   const [movies, setMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
   const [movieType, setMovieType] = useContext(MovieType)
 
   useEffect(() => {
 
-    fetchBookmarkList()
-    console.log(movies.length)
+    firebase.auth().onAuthStateChanged(user => {
+      if(user){
+        fetchBookmarkList()
+      }else{
+        console.log('error')
+      }
+    })
     
-  }, [movies.length])
+    
+  }, [firebase.auth().currentUser?.uid])
 
-  const fetchBookmarkList = async () => {
+  const fetchBookmarkList = () => {
     firebase.firestore().collection('mobile_users').doc(firebase.auth().currentUser?.uid)
       .onSnapshot(doc => {
         if(doc.exists){
-          setMovies(doc.data().bookmarks)
+          const data = doc.data().bookmarks
+          setMovies(data)
+          console.log('ok')
         }
       })
   }
+  
 
   const renderBookmarkRow = ({ item, index }) => {
     
