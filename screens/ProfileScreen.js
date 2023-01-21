@@ -9,9 +9,10 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Icons from "@expo/vector-icons";
-import ProgressBar from "./ProgressBar";
+// import ProgressBar from "./ProgressBar";
 import ProfileIcons from "./FooterComponent/ProfileIcons";
 import { AuthContext } from "../components/context";
+import firebase from 'firebase'
 
 const { width, height } = Dimensions.get("screen");
 
@@ -33,19 +34,19 @@ const ProfileScreen = () => {
           source={require("../assets/images/unsplashMan.png")}
           style={styles.img_style}
         />
-        {/* <Text
+        <Text
           style={{
-            marginTop: 130,
+            marginTop: 30,
             color: "#fff",
             fontFamily: "BoldItalic",
             fontSize: 16,
           }}
         >
-          Jack Sparrow
-        </Text> */}
+          {firebase.auth().currentUser?.email}
+        </Text>
       </View>
 
-      <View style={{ marginTop: 25, flexDirection: "row" }}>
+      {/* <View style={{ marginTop: 25, flexDirection: "row" }}>
         <View
           style={{
             flexDirection: "column",
@@ -67,7 +68,7 @@ const ProfileScreen = () => {
           <Text style={styles.headerText}>Streak</Text>
           <ProgressBar data={5.3} tintColor={"#00ffb9"} />
         </View>
-      </View>
+      </View> */}
       <View style={{ alignItems: "center", marginTop: 10 }}>
         <LinearGradient
           colors={["#373636", "#373636", "#1C1B1A"]}
@@ -75,7 +76,7 @@ const ProfileScreen = () => {
           end={{ x: 0.5, y: 1.0 }}
           style={styles.card}
         >
-          <View style={{ flexDirection: "row" }}>
+          {/* <View style={{ flexDirection: "row" }}>
             <ProfileIcons name="Liked" icons_name="heart" color="#00e0ff" />
 
             <View style={styles.icons_row}>
@@ -126,7 +127,16 @@ const ProfileScreen = () => {
               icons_name="help-circle"
               color="#00e0ff"
             />
-          </View>
+          </View> */}
+          <Text
+            style={{
+              color: "#fff",
+              fontFamily: "BoldItalic",
+              fontSize: 16,
+            }}
+          >
+            Coming soon!🥰
+          </Text>
         </LinearGradient>
       </View>
       <View
@@ -198,6 +208,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 25,
     opacity: 0.8,
+    alignItems: 'center', //Прибрати коли добавляти нові функції
+    justifyContent: 'center'
   },
   iconTop: {
     marginTop: 10,
