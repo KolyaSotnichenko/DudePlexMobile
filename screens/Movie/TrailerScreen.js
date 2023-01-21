@@ -72,13 +72,13 @@ const TrailerScreen = ({ route }) => {
   }
 
   useEffect(() => {
-    firebase.firestore().collection("mobile_users").doc(firebase.auth().currentUser?.uid).get()
-      .then(doc => {
+    firebase.firestore().collection('mobile_users').doc(firebase.auth().currentUser?.uid)
+      .onSnapshot(doc => {
         setIsBookmarked(
           doc.data()?.bookmarks.some(item => item.key === data?.key)
         )
       })
-  }, [data?.key])
+  }, [])
 
   useEffect(() => {
     fetch(externalIDSMovie)

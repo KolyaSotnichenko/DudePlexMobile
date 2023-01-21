@@ -15,16 +15,15 @@ const BookmarksScreen = ({navigation}) => {
 
     fetchBookmarkList()
     
-  }, [firebase.auth().currentUser?.uid])
+  }, [])
 
   const fetchBookmarkList = async () => {
-    firebase.firestore().collection("mobile_users").doc(firebase.auth().currentUser?.uid).get()
-    .then(doc => {
-      if(doc.exists){
-        console.log(doc.data().bookmarks)
-        setMovies(doc.data().bookmarks)
-      }
-    })
+    firebase.firestore().collection('mobile_users').doc(firebase.auth().currentUser?.uid)
+      .onSnapshot(doc => {
+        if(doc.exists){
+          setMovies(doc.data().bookmarks)
+        }
+      })
   }
 
   const renderBookmarkRow = ({ item, index }) => {
