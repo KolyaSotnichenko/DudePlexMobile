@@ -145,6 +145,7 @@ const styles = StyleSheet.create({
     width: width,
     height: height,
     alignItems: "center",
+    paddingTop: Platform.OS === "android" ? 20 : 0
   },
   containerEmpty: {
     flex: 1,
