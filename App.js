@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { StyleSheet, StatusBar } from "react-native";
+import { StyleSheet } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import AuthStack from "./components/navigation/AuthStack";
 import { useFonts } from "expo-font";
@@ -41,7 +42,7 @@ function App() {
   return (
     <>
       <MovieType.Provider value={[movieType, setMovieType]}>
-        <StatusBar barStyle={"light-content"} />
+        <StatusBar style="light" />
         <NavigationContainer>
           <TrailerScreenStack.Navigator screenOptions={{ headerShown: false }}>
             <TrailerScreenStack.Screen name="AuthStack" component={AuthStack} />

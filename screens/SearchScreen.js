@@ -139,13 +139,13 @@ const SearchScreen = ({navigation}) => {
           />
 
           <View style={styles.tabs}>
-            <Text style={provider === "movies" ? {fontWeight: 'bold', color: 'royalblue', borderWidth: '1px', borderRadius: 10, paddingTop: 10, paddingBottom: 10, paddingLeft: 15, paddingRight: 15, borderColor: 'royalblue'} : {color: '#fff'}} onPress={() => {
+            <Text style={provider === "movies" ? styles.tabActive : {color: '#fff'}} onPress={() => {
               setInputSearch("")
               setMovies(null)
               setProvider("movies")
               setMovieType("movie")
             }}>Фільми</Text>
-            <Text style={provider === "tvs" ? {fontWeight: 'bold', color: 'royalblue', borderWidth: '1px', borderRadius: 10, paddingTop: 10, paddingBottom: 10, paddingLeft: 15, paddingRight: 15, borderColor: 'royalblue'} : {color: '#fff'}} onPress={() => {
+            <Text style={provider === "tvs" ? styles.tabActive : {color: '#fff'}} onPress={() => {
               setInputSearch("")
               setMovies(null)
               setProvider("tvs")
@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
     width: width,
     height: height,
     alignItems: "center",
+    paddingTop: Platform.OS === "android" ? 20 : 0
   },
 
   searchbar: {
@@ -226,5 +227,16 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     height: 50,
     alignItems: 'center',
+  },
+  tabActive: {
+    fontWeight: 'bold', 
+    color: 'royalblue', 
+    borderWidth: 1, 
+    borderRadius: 10, 
+    paddingTop: 10, 
+    paddingBottom: 10, 
+    paddingLeft: 15, 
+    paddingRight: 15, 
+    borderColor: 'royalblue'
   }
 });

@@ -16,8 +16,8 @@ import Backdrop from "./Backdrop";
 import Genres from "./FooterComponent/Genres";
 import { MovieType } from "../components/contextMovieType";
 
-const { width, height } = Dimensions.get("window");
-const SPACING = 10;
+const { width, height } = Dimensions.get("screen");
+const SPACING = 7;
 const ITEM_SIZE = width * 0.72;
 
 const HomeScreen = ({ navigation }) => {
@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#0F0F0F",
+    paddingTop: Platform.OS === "android" ? 40 : 0
   },
   posterImage: {
     width: "100%",
