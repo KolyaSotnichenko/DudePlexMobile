@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -21,9 +21,20 @@ const CARD_HEIGHT = height / 4;
 
 const ProfileScreen = () => {
   const { signOut } = useContext(AuthContext);
+  const [userEmail, setUserEmail] = useState('')
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if(user){
+        setUserEmail(user.email)
+      }
+    })
+  },[firebase.auth().currentUser?.uid])
+
+  console.log(userEmail)
 
   const image_url =
-    "https://images.unsplash.com/photo-1497551060073-4c5ab6435f12?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=667&q=80";
+    "https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=834&q=80";
   return (
     <LinearGradient
       colors={["#181818", "#0F0F0F", "#0C0C0C"]}
@@ -31,7 +42,7 @@ const ProfileScreen = () => {
     >
       <View style={{ alignItems: "center", marginTop: 20 }}>
         <Image
-          source={require("../assets/images/unsplashMan.jpg")}
+          source={{uri: image_url}}
           style={styles.img_style}
         />
         <Text
@@ -42,7 +53,7 @@ const ProfileScreen = () => {
             fontSize: 16,
           }}
         >
-          {firebase.auth().currentUser?.email}
+          {userEmail}
         </Text>
       </View>
 
